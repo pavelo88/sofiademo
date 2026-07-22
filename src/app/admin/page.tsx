@@ -56,13 +56,14 @@ export default function AdminDashboardPage() {
         pendingJobs: 0,
         inProgressJobs: 0,
         inspectors: 0,
-        totalJobs: 0,
         completedJobs: 0,
         operationalInspectors: 0
     });
     const [recentJobs, setRecentJobs] = useState<Job[]>([]);
     const [expensesByInspector, setExpensesByInspector] = useState<any[]>([]);
     const db = useFirestore();
+
+    const totalJobs = useMemo(() => stats.pendingJobs + stats.inProgressJobs + stats.completedJobs, [stats.pendingJobs, stats.inProgressJobs, stats.completedJobs]);
 
     const headerAction = useMemo(() => (
         <div className="flex items-center gap-4">
@@ -125,7 +126,7 @@ export default function AdminDashboardPage() {
             const activeReports = snapshot.docs
                 .map(doc => ({ id: doc.id, ...doc.data() } as any))
                 .filter(report => report.eliminado !== true);
-            setStats(prev => ({ ...prev, completedJobs: activeReports.length, totalJobs: prev.pendingJobs + prev.inProgressJobs + activeReports.length }));
+            setStats(prev => ({ ...prev, completedJobs: activeReports.length }));
 
             // Cargar los últimos 5 para la tabla de actividad
             const latest = activeReports
@@ -173,7 +174,7 @@ export default function AdminDashboardPage() {
                                 <span className="font-bold text-slate-900">{stats.operationalInspectors || 0}</span>
                             </div>
                             <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
-                                <div className="h-full bg-emerald-500 transition-all duration-1000" style={{ width: `${(stats.operationalInspectors || 0) / stats.inspectors * 100}%` }} />
+                                <div className="h-full bg-emerald-500 transition-all duration-1000" style={{ width: `${stats.inspectors > 0 ? ((stats.operationalInspectors || 0) / stats.inspectors) * 100 : 0}%` }} />
                             </div>
                         </div>
 
@@ -183,7 +184,7 @@ export default function AdminDashboardPage() {
                                 <span className="font-bold text-slate-900">{freeInspectors}</span>
                             </div>
                             <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
-                                <div className="h-full bg-blue-500 transition-all duration-1000" style={{ width: `${freeInspectors / stats.inspectors * 100}%` }} />
+                                <div className="h-full bg-blue-500 transition-all duration-1000" style={{ width: `${stats.inspectors > 0 ? (freeInspectors / stats.inspectors) * 100 : 0}%` }} />
                             </div>
                         </div>
 
@@ -221,7 +222,7 @@ export default function AdminDashboardPage() {
                         <div className="flex items-center gap-6">
                             <div className="flex flex-col">
                                 <span className="text-[10px] font-black text-slate-500 uppercase">Capacidad Utilizada</span>
-                                <span className="text-xl font-black text-slate-900">{Math.round((stats.operationalInspectors || 0) / stats.inspectors * 100)}%</span>
+                                <span className="text-xl font-black text-slate-900">{stats.inspectors > 0 ? Math.round(((stats.operationalInspectors || 0) / stats.inspectors) * 100) : 0}%</span>
                             </div>
                             <div className="flex flex-col">
                                 <span className="text-[10px] font-black text-slate-500 uppercase">Pendientes</span>

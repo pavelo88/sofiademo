@@ -14,6 +14,7 @@ import {
   Camera,
   CheckCircle2,
   Clock,
+  Image as ImageIcon,
   Loader2,
   MapPinned,
   Pencil,
@@ -101,6 +102,7 @@ export default function BitacoraVisitasForm({ otFilter }: { otFilter?: string | 
   const [startConfig, setStartConfig] = useState({ clienteId: '', clienteNombre: '', actividad: 'Inspección', orderId: '' });
   const [activeOTs, setActiveOTs] = useState<any[]>([]);
   const stopFileInputRef = useRef<HTMLInputElement>(null);
+  const stopGalleryInputRef = useRef<HTMLInputElement>(null);
 
   // --- RECUPERAR PARADA ACTIVA ---
   useEffect(() => {
@@ -513,7 +515,13 @@ export default function BitacoraVisitasForm({ otFilter }: { otFilter?: string | 
                 </Button>
               </div>
 
-              <Button variant="outline" onClick={() => stopFileInputRef.current?.click()} className={`w-full h-12 rounded-xl border-2 transition-all ${tempHours.motorFile ? 'bg-emerald-100 border-emerald-500 text-emerald-600' : 'bg-white/50 text-slate-400 border-transparent'}`}><Camera size={18} className="mr-2" /> {tempHours.motorFile ? 'EVIDENCIA ARCHIVADA' : 'ADJUNTAR FOTO (OPCIONAL)'}<input type="file" ref={stopFileInputRef} className="hidden" onChange={e => setTempHours({ ...tempHours, motorFile: e.target.files?.[0] })} /></Button>
+              <div className="flex gap-3">
+                <Button variant="outline" onClick={() => { if(stopFileInputRef.current) stopFileInputRef.current.value = ''; stopFileInputRef.current?.click(); }} className={`flex-1 h-12 rounded-xl border-2 transition-all ${tempHours.motorFile ? 'bg-emerald-100 border-emerald-500 text-emerald-600' : 'bg-white/50 text-slate-400 border-transparent'}`}><Camera size={18} className="mr-2" /> CÁMARA</Button>
+                <Button variant="outline" onClick={() => { if(stopGalleryInputRef.current) stopGalleryInputRef.current.value = ''; stopGalleryInputRef.current?.click(); }} className={`flex-1 h-12 rounded-xl border-2 transition-all ${tempHours.motorFile ? 'bg-emerald-100 border-emerald-500 text-emerald-600' : 'bg-white/50 text-slate-400 border-transparent'}`}><ImageIcon size={18} className="mr-2" /> GALERÍA</Button>
+                <input type="file" ref={stopFileInputRef} hidden accept="image/*" capture="environment" onChange={e => setTempHours({ ...tempHours, motorFile: e.target.files?.[0] })} />
+                <input type="file" ref={stopGalleryInputRef} hidden accept="image/*" onChange={e => setTempHours({ ...tempHours, motorFile: e.target.files?.[0] })} />
+              </div>
+              {tempHours.motorFile && <p className="text-center text-[10px] font-black text-emerald-600 uppercase tracking-widest">EVIDENCIA ARCHIVADA ✅</p>}
             </div>
           )}
         </section>
@@ -571,11 +579,11 @@ export default function BitacoraVisitasForm({ otFilter }: { otFilter?: string | 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-[10px] font-black text-slate-900 uppercase ml-2 tracking-widest">Hora Llegada</label>
-                  <Input value={currentEditVisit.horaLlegada} onChange={e => setCurrentEditVisit({ ...currentEditVisit, horaLlegada: e.target.value })} className="h-14 rounded-2xl text-center font-black text-slate-900 bg-slate-50 border-slate-200" />
+                  <Input type="time" value={currentEditVisit.horaLlegada} onChange={e => setCurrentEditVisit({ ...currentEditVisit, horaLlegada: e.target.value })} className="h-14 rounded-2xl text-center font-black text-slate-900 bg-slate-50 border-slate-200" />
                 </div>
                 <div className="space-y-1">
                   <label className="text-[10px] font-black text-slate-900 uppercase ml-2 tracking-widest">Hora Salida</label>
-                  <Input value={currentEditVisit.horaSalida} onChange={e => setCurrentEditVisit({ ...currentEditVisit, horaSalida: e.target.value })} className="h-14 rounded-2xl text-center font-black text-slate-900 bg-slate-50 border-slate-200" />
+                  <Input type="time" value={currentEditVisit.horaSalida} onChange={e => setCurrentEditVisit({ ...currentEditVisit, horaSalida: e.target.value })} className="h-14 rounded-2xl text-center font-black text-slate-900 bg-slate-50 border-slate-200" />
                 </div>
               </div>
 
@@ -592,6 +600,12 @@ export default function BitacoraVisitasForm({ otFilter }: { otFilter?: string | 
                     if (!canUseCloud) return toast({ variant: 'destructive', title: 'Sin conexión' });
                     setLoading(true);
                     try {
+                      const timeRegex = /^\d{2}:\d{2}$/;
+                      if (!timeRegex.test(currentEditVisit.horaLlegada) || !timeRegex.test(currentEditVisit.horaSalida)) {
+                        toast({ variant: 'destructive', title: 'Formato inválido', description: 'Las horas deben tener formato HH:mm' });
+                        setLoading(false);
+                        return;
+                      }
                       const arrivalDate = parse(currentEditVisit.horaLlegada, 'HH:mm', new Date());
                       const stopDate = parse(currentEditVisit.horaSalida, 'HH:mm', new Date());
                       const diffMinutes = differenceInMinutes(stopDate, arrivalDate);

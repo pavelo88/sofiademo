@@ -55,7 +55,6 @@ export default function SignaturePad({ title, onSignatureEnd, signature, showSav
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
       ctx.strokeStyle = '#165a30'; // Slate-900 para máxima legibilidad
-      ctx.strokeStyle = '#165a30'; 
       ctx.lineWidth = 2.5; 
       ctx.fillStyle = '#ffffff'; 
       ctx.fillRect(0, 0, canvas.width, canvas.height);

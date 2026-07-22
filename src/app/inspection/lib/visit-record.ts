@@ -26,6 +26,9 @@ export const buildVisitId = (
   const safeDate = Number.isNaN(date.getTime()) ? new Date() : date;
   const initials = getFallbackInitials(inspectorEmail, inspectorName);
   const datePart = format(safeDate, 'yyyyMMdd');
+  const timePart = format(safeDate, 'HHmmss');
+  // If time is midnight (likely a date-only value), use a unique suffix from timestamp
+  const uniqueSuffix = timePart !== '000000' ? timePart : String(Date.now()).slice(-6);
 
-  return `VIS-${initials}-${datePart}`;
+  return `VIS-${initials}-${datePart}-${uniqueSuffix}`;
 };
