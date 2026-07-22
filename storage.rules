@@ -1,0 +1,37 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    match /informes/{userId}/{allPaths=**} {
+      allow read, write: if signedIn() && (request.auth.uid == userId || isAdmin());
+    }
+
+    match /firmas/{userId}/{allPaths=**} {
+      allow read, write: if signedIn() && (request.auth.uid == userId || isAdmin());
+    }
+
+    match /firmas_maestras/{allPaths=**} {
+      allow read, write: if signedIn() && isAdmin();
+    }
+
+    match /comprobantes_gastos/{userId}/{allPaths=**} {
+      allow read, write: if signedIn() && (request.auth.uid == userId || isAdmin());
+    }
+
+    match /bitacora_filtros/{userId}/{allPaths=**} {
+      allow read, write: if signedIn() && (request.auth.uid == userId || isAdmin());
+    }
+
+    match /visitas/{userId}/{allPaths=**} {
+      allow read, write: if signedIn() && (request.auth.uid == userId || isAdmin());
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

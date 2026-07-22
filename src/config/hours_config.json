@@ -1,0 +1,23 @@
+{
+  "pais": "España",
+  "año": 2026,
+  "configuracion_horas": {
+    "festivos_oficiales": [
+      {"fecha": "2026-01-01", "nombre": "Año Nuevo", "tipo": "Especial"},
+      {"fecha": "2026-01-06", "nombre": "Epifanía del Señor", "tipo": "Especial"},
+      {"fecha": "2026-04-02", "nombre": "Jueves Santo", "tipo": "Especial"},
+      {"fecha": "2026-04-03", "nombre": "Viernes Santo", "tipo": "Especial"},
+      {"fecha": "2026-05-01", "nombre": "Fiesta del Trabajo", "tipo": "Especial"},
+      {"fecha": "2026-08-15", "nombre": "Asunción de la Virgen", "tipo": "Especial"},
+      {"fecha": "2026-10-12", "nombre": "Fiesta Nacional de España", "tipo": "Especial"},
+      {"fecha": "2026-11-01", "nombre": "Todos los Santos", "tipo": "Especial"},
+      {"fecha": "2026-12-06", "nombre": "Día de la Constitución", "tipo": "Especial"},
+      {"fecha": "2026-12-08", "nombre": "Inmaculada Concepción", "tipo": "Especial"},
+      {"fecha": "2026-12-25", "nombre": "Natividad del Señor", "tipo": "Especial"}
+    ],
+    "reglas_fines_de_semana": {
+      "sabado": "Especial",
+      "domingo": "Especial"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "origin": [
+      "https://www.energyengine.es",
+      "https://energyengine.es",
+      "https://*.cloudworkstations.dev",
+      "https://*.firebaseapp.com",
+      "https://*.web.app",
+      "http://localhost:3000",
+      "http://localhost:9002"
+    ],
+    "method": ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"],
+    "responseHeader": ["Content-Type", "Authorization", "x-goog-resumable", "x-goog-meta-custom-header", "Origin", "X-Requested-With", "Accept"],
+    "maxAgeSeconds": 3600
+  }
+]

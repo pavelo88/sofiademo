@@ -1,0 +1,8 @@
+[
+  {
+    "origin": ["https://energyengine.es", "https://www.energyengine.es"],
+    "method": ["GET", "POST", "PUT", "DELETE", "HEAD"],
+    "responseHeader": ["Content-Type", "Authorization", "x-goog-resumable"],
+    "maxAgeSeconds": 3600
+  }
+]

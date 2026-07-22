@@ -1,0 +1,52 @@
+{
+  "placeholderImages": [
+    {
+      "id": "global-background",
+      "description": "Abstract dark background with energy flows.",
+      "imageUrl": "https://images.unsplash.com/photo-1531736275454-2a5c487948de?q=80&w=2574&auto=format&fit=crop",
+      "imageHint": "abstract technology"
+    },
+    {
+      "id": "hero-background",
+      "description": "Abstract lines of light representing energy and data flow.",
+      "imageUrl": "https://images.unsplash.com/photo-1533208759549-8a7e5a07b7a0?q=80&w=2070&auto=format&fit=crop",
+      "imageHint": "abstract energy"
+    },
+    {
+      "id": "service-1",
+      "description": "Critical interventions in high-performance diesel and gas engines.",
+      "imageUrl": "https://images.unsplash.com/photo-1701743802766-a982b2cc3d92?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxlbmdpbmUlMjBtYWludGVuYW5jZXxlbnwwfHx8fDE3NzE1NDEwMjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "engine maintenance"
+    },
+    {
+      "id": "service-2",
+      "description": "Simulation of network failures with 600kW resistive banks.",
+      "imageUrl": "https://images.unsplash.com/photo-1758295746012-41650245a9bb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxlbGVjdHJpY2FsJTIwdGVzdGluZ3xlbnwwfHx8fDE3NzE1NDEwMjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "electrical testing"
+    },
+    {
+      "id": "service-3",
+      "description": "Engineering in control panels and PLC/DEIF equipment.",
+      "imageUrl": "https://images.unsplash.com/photo-1611315939887-bcca57767326?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y29udHJvbCUyMHN5c3RlbXN8ZW58MHx8fHwxNzcxNTQxMDIzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "control systems"
+    },
+    {
+      "id": "service-4",
+      "description": "Complete overhaul of mission-critical generator sets.",
+      "imageUrl": "https://images.unsplash.com/photo-1560024253-7bc7fb1f188e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxlbmdpbmUlMjBvdmVyaGF1bHxlbnwwfHx8fDE3NzE1NDEwMjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "engine overhaul"
+    },
+    {
+      "id": "service-5",
+      "description": "Remote monitoring to prevent unexpected shutdowns.",
+      "imageUrl": "https://images.unsplash.com/photo-1731846584223-81977e156b2c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0ZWxlbWV0cnklMjBkYXNoYm9hcmR8ZW58MHx8fHwxNzcxNTQxMDIzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "telemetry dashboard"
+    },
+    {
+      "id": "service-6",
+      "description": "Immediate supply of original filters and components.",
+      "imageUrl": "https://images.unsplash.com/photo-1720036236632-fdb6211cf317?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3YXJlaG91c2UlMjBwYXJ0c3xlbnwwfHx8fDE3NzE1NDEwMjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "warehouse parts"
+    }
+  ]
+}
