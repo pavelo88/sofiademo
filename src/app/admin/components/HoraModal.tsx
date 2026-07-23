@@ -135,7 +135,7 @@ export default function HoraModal({ isOpen, onClose, record, onSaved, db, client
                 if (val === 'none') {
                   setFormData({ ...formData, orderId: null });
                 } else {
-                  const ot = ots.find(o => o.id === val);
+                  const ot = activeOTs.find(o => o.id === val);
                   if (ot) {
                     setFormData({ ...formData, orderId: ot.id, clienteId: ot.clienteId || '', clienteNombre: ot.clienteNombre || ot.cliente || '' });
                   }
@@ -147,7 +147,7 @@ export default function HoraModal({ isOpen, onClose, record, onSaved, db, client
               </SelectTrigger>
               <SelectContent className="bg-white">
                 <SelectItem value="none">SIN VÍNCULO</SelectItem>
-                {ots.map((ot: any) => (
+                {activeOTs.map((ot: any) => (
                   <SelectItem key={ot.id} value={ot.id}>
                     {ot.id} - {(ot.clienteNombre || ot.cliente || '').toUpperCase()}
                   </SelectItem>

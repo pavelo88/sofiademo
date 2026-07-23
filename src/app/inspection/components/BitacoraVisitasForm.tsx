@@ -38,7 +38,7 @@ import { calculateHoursBreakdown, formatTechnicianName } from '@/lib/hours-utils
 import { resolveInspectorEmail } from '@/lib/inspection-mode';
 import { fileToBase64 } from '@/lib/offline-utils';
 import { buildVisitId } from '../lib/visit-record';
-import BitacoraMultiRowForm from './forms/BitacoraMultiRowForm';
+import BitacoraMultiRowForm from '@/components/forms/BitacoraMultiRowForm';
 
 // --- TIPOS DE DATOS ---
 type VisitaItem = {
