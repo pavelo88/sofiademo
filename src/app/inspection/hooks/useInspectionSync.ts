@@ -375,10 +375,20 @@ export function useInspectionSync(canUseCloud: boolean, user: any, firestore: an
   }, [canUseCloud, firestore, user, toast, ensureCloudCounterAtLeast, cleanupSyncedData, offlineEmail]);
 
   useEffect(() => {
+    let abortController = new AbortController();
+    
+    const runSync = async () => {
+      if (abortController.signal.aborted) return;
+      await syncOfflineData();
+    };
+
     if (canUseCloud) {
-      const interval = setInterval(syncOfflineData, 30000);
-      syncOfflineData();
-      return () => clearInterval(interval);
+      const interval = setInterval(runSync, 30000);
+      runSync();
+      return () => {
+        clearInterval(interval);
+        abortController.abort();
+      };
     }
   }, [canUseCloud, syncOfflineData]);
 

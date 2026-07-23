@@ -10,6 +10,7 @@ import { Client, HoraItem, User } from '@/types/models';
 import { addDoc, collection, doc, getDocs, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 interface HoraModalProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ interface HoraModalProps {
 }
 
 export default function HoraModal({ isOpen, onClose, record, onSaved, db, clients, inspectors }: HoraModalProps) {
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<any>(() => {
     if (record) {
@@ -79,7 +81,10 @@ export default function HoraModal({ isOpen, onClose, record, onSaved, db, client
       if (record && record.id) await updateDoc(doc(db, 'bitacora_visitas', record.id), cleanPayload as any);
       else await addDoc(collection(db, 'bitacora_visitas'), { ...cleanPayload, estado: 'Registrado', createdAt: serverTimestamp() });
       onSaved(); onClose();
-    } catch (e) { console.error(e); } finally { setLoading(false); }
+    } catch (e) { 
+      console.error(e); 
+      toast({ variant: 'destructive', title: 'Error al procesar la hora', description: 'Por favor, revisa tu conexión e inténtalo de nuevo.' });
+    } finally { setLoading(false); }
   };
 
   return (
@@ -130,7 +135,7 @@ export default function HoraModal({ isOpen, onClose, record, onSaved, db, client
                 if (val === 'none') {
                   setFormData({ ...formData, orderId: null });
                 } else {
-                  const ot = activeOTs.find(o => o.id === val);
+                  const ot = ots.find(o => o.id === val);
                   if (ot) {
                     setFormData({ ...formData, orderId: ot.id, clienteId: ot.clienteId || '', clienteNombre: ot.clienteNombre || ot.cliente || '' });
                   }
@@ -142,7 +147,7 @@ export default function HoraModal({ isOpen, onClose, record, onSaved, db, client
               </SelectTrigger>
               <SelectContent className="bg-white">
                 <SelectItem value="none">SIN VÍNCULO</SelectItem>
-                {activeOTs.map((ot: any) => (
+                {ots.map((ot: any) => (
                   <SelectItem key={ot.id} value={ot.id}>
                     {ot.id} - {(ot.clienteNombre || ot.cliente || '').toUpperCase()}
                   </SelectItem>
@@ -173,15 +178,15 @@ export default function HoraModal({ isOpen, onClose, record, onSaved, db, client
           </div>
           <div className="space-y-1">
             <label className="text-[10px] font-black uppercase ml-1 text-slate-900 tracking-widest">Normales</label>
-            <Input type="number" step="0.01" value={formData.horasNormales} onChange={e => setFormData({ ...formData, horasNormales: e.target.value })} className="h-12 rounded-xl bg-slate-50 border-slate-200 font-black text-slate-900" />
+            <Input type="number" step="0.01" value={formData.horasNormales} onChange={e => setFormData({ ...formData, horasNormales: Number(e.target.value) || 0 })} className="h-12 rounded-xl bg-slate-50 border-slate-200 font-black text-slate-900" />
           </div>
           <div className="space-y-1">
             <label className="text-[10px] font-black uppercase ml-1 text-slate-900 tracking-widest">Extras</label>
-            <Input type="number" step="0.01" value={formData.horasExtras} onChange={e => setFormData({ ...formData, horasExtras: e.target.value })} className="h-12 rounded-xl bg-slate-50 border-slate-200 font-black text-slate-900" />
+            <Input type="number" step="0.01" value={formData.horasExtras} onChange={e => setFormData({ ...formData, horasExtras: Number(e.target.value) || 0 })} className="h-12 rounded-xl bg-slate-50 border-slate-200 font-black text-slate-900" />
           </div>
           <div className="space-y-1">
             <label className="text-[10px] font-black uppercase ml-1 text-slate-900 tracking-widest">Especiales</label>
-            <Input type="number" step="0.01" value={formData.horasEspeciales} onChange={e => setFormData({ ...formData, horasEspeciales: e.target.value })} className="h-12 rounded-xl bg-slate-50 border-slate-200 font-black text-slate-900" />
+            <Input type="number" step="0.01" value={formData.horasEspeciales} onChange={e => setFormData({ ...formData, horasEspeciales: Number(e.target.value) || 0 })} className="h-12 rounded-xl bg-slate-50 border-slate-200 font-black text-slate-900" />
           </div>
         </div>
         <DialogFooter className="mt-8 flex gap-3">

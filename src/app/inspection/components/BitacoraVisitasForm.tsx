@@ -14,7 +14,6 @@ import {
   Camera,
   CheckCircle2,
   Clock,
-  Image as ImageIcon,
   Loader2,
   MapPinned,
   Pencil,
@@ -39,7 +38,7 @@ import { calculateHoursBreakdown, formatTechnicianName } from '@/lib/hours-utils
 import { resolveInspectorEmail } from '@/lib/inspection-mode';
 import { fileToBase64 } from '@/lib/offline-utils';
 import { buildVisitId } from '../lib/visit-record';
-import BitacoraMultiRowForm from '@/components/forms/BitacoraMultiRowForm';
+import BitacoraMultiRowForm from './forms/BitacoraMultiRowForm';
 
 // --- TIPOS DE DATOS ---
 type VisitaItem = {
@@ -94,6 +93,7 @@ export default function BitacoraVisitasForm({ otFilter }: { otFilter?: string | 
   const [initialLoading, setInitialLoading] = useState(true);
   const [clients, setClients] = useState<any[]>([]);
   const [viewMode, setViewMode] = useState<'individual' | 'tabla'>('individual');
+  const [omitirAlmuerzo, setOmitirAlmuerzo] = useState(false);
 
   // Estado temporal para marcar salida
   const [tempHours, setTempHours] = useState({ normales: '', extras: '', especiales: '', motorFile: undefined as File | undefined });
@@ -102,7 +102,6 @@ export default function BitacoraVisitasForm({ otFilter }: { otFilter?: string | 
   const [startConfig, setStartConfig] = useState({ clienteId: '', clienteNombre: '', actividad: 'Inspección', orderId: '' });
   const [activeOTs, setActiveOTs] = useState<any[]>([]);
   const stopFileInputRef = useRef<HTMLInputElement>(null);
-  const stopGalleryInputRef = useRef<HTMLInputElement>(null);
 
   // --- RECUPERAR PARADA ACTIVA ---
   useEffect(() => {
@@ -253,33 +252,154 @@ export default function BitacoraVisitasForm({ otFilter }: { otFilter?: string | 
 
   const handleGuardarSalida = async () => {
     if (!activeStop || !stopTimeManual) return;
-
     const horaSalida = stopTimeManual;
 
-    // Calculamos el total real del cronómetro usando el timestamp si existe para precisión máxima
-    let diffMinutes = 0;
-    if (activeStop.arrivalTimestamp) {
-      const arrivalDate = new Date(activeStop.arrivalTimestamp);
-      const stopDate = new Date(); // Salida es AHORA
-      diffMinutes = differenceInMinutes(stopDate, arrivalDate);
-    } else {
-      // Fallback a lógica de HH:mm (para sesiones antiguas)
-      const arrivalDate = parse(activeStop.horaLlegada, 'HH:mm', new Date());
-      const stopDate = parse(stopTimeManual, 'HH:mm', new Date());
-      diffMinutes = differenceInMinutes(stopDate, arrivalDate);
-      if (diffMinutes < 0) diffMinutes += 1440; // Cruce de medianoche
+    const arrivalDate = activeStop.arrivalTimestamp ? new Date(activeStop.arrivalTimestamp) : parse(activeStop.horaLlegada, 'HH:mm', reportDate);
+    const stopDate = activeStop.arrivalTimestamp ? new Date() : parse(stopTimeManual, 'HH:mm', reportDate);
+    
+    // Si usamos HH:mm (fallback), verificamos si cruza medianoche
+    const isCrossDayFallback = !activeStop.arrivalTimestamp && differenceInMinutes(stopDate, arrivalDate) < 0;
+    // Si usamos Date, verificamos si cambió de día (y no es un retroceso en el tiempo)
+    const isCrossDayTimestamp = activeStop.arrivalTimestamp && (arrivalDate.getDate() !== stopDate.getDate());
+    
+    const isCrossDay = isCrossDayFallback || isCrossDayTimestamp;
+    
+    let totalRealDiff = differenceInMinutes(stopDate, arrivalDate);
+    if (totalRealDiff < 0) totalRealDiff += 1440;
+    
+    const shouldDeductAlmuerzo = totalRealDiff >= 480 && !omitirAlmuerzo && activeStop.actividad !== 'ALIMENTACION';
+
+    let mUrl = '';
+    
+    if (isCrossDay) {
+      if (!window.confirm(`¿Guardar visita de ${activeStop.clienteNombre}? IMPORTANTE: La jornada cruzó la medianoche, se generarán DOS registros (uno para hoy y otro para mañana como horas extras).`)) return;
+      setLoading(true);
+      try {
+        if (tempHours.motorFile && canUseCloud) {
+          const base64 = await fileToBase64(tempHours.motorFile);
+          const fRef = ref(storage!, `visitas/${inspectorEmail}/${Date.now()}_img.png`);
+          await uploadString(fRef, base64, 'data_url');
+          mUrl = await getDownloadURL(fRef);
+        }
+
+        // --- REGISTRO 1: Día Actual (hasta las 23:59) ---
+        const eodDate = new Date(arrivalDate);
+        eodDate.setHours(23, 59, 0, 0);
+        let diff1 = differenceInMinutes(eodDate, arrivalDate);
+        
+        let descuento1 = 0;
+        let descuento2 = 0;
+        if (shouldDeductAlmuerzo) {
+          if (diff1 >= 60) {
+            descuento1 = 60;
+            diff1 -= 60;
+          } else {
+            descuento1 = diff1;
+            descuento2 = 60 - diff1;
+            diff1 = 0;
+          }
+        }
+        
+        const total1 = diff1 > 0 ? diff1 / 60 : 0;
+        const accumulatedNormalHours = visitas.reduce((sum, v) => sum + (v.horasNormales || 0), 0);
+        const breakdown1 = calculateHoursBreakdown(total1, reportDate, accumulatedNormalHours);
+        
+        const id1 = buildVisitId(inspectorEmail, user?.displayName, reportDate) + '_P1';
+        const docData1: VisitaItem & { descuentoAlimentacion?: number } = {
+          id: id1, clienteId: activeStop.clienteId, clienteNombre: activeStop.clienteNombre, actividad: activeStop.actividad,
+          horaLlegada: activeStop.horaLlegada, horaSalida: '23:59', ubicacionLlegada: activeStop.ubicacionLlegada,
+          horasNormales: breakdown1.normal, horasExtras: breakdown1.extra, horasEspeciales: breakdown1.special,
+          hNormalesStr: breakdown1.normal.toFixed(2), hExtrasStr: breakdown1.extra.toFixed(2), hEspecialesStr: breakdown1.special.toFixed(2),
+          motorUrl: mUrl || undefined, estado: 'Registrado', fecha: reportDate,
+          descuentoAlimentacion: descuento1 > 0 ? descuento1 / 60 : 0
+        };
+
+        // --- REGISTRO 2: Día Siguiente (desde las 00:00) ---
+        const nextDay = new Date(reportDate);
+        nextDay.setDate(nextDay.getDate() + 1);
+        
+        let diff2 = 0;
+        if (activeStop.arrivalTimestamp) {
+          const startOfDay = new Date(stopDate);
+          startOfDay.setHours(0, 0, 0, 0);
+          diff2 = differenceInMinutes(stopDate, startOfDay);
+        } else {
+          const startOfDay = parse('00:00', 'HH:mm', reportDate);
+          diff2 = differenceInMinutes(stopDate, startOfDay);
+        }
+        
+        if (descuento2 > 0) diff2 -= descuento2;
+        const total2 = diff2 > 0 ? diff2 / 60 : 0;
+        
+        const breakdown2 = {
+          normal: 0,
+          extra: 0,
+          special: Number(total2.toFixed(2))
+        };
+
+        const id2 = buildVisitId(inspectorEmail, user?.displayName, nextDay) + '_P2';
+        const docData2: VisitaItem & { descuentoAlimentacion?: number } = {
+          id: id2, clienteId: activeStop.clienteId, clienteNombre: activeStop.clienteNombre, actividad: activeStop.actividad,
+          horaLlegada: '00:00', horaSalida, ubicacionLlegada: activeStop.ubicacionLlegada,
+          horasNormales: breakdown2.normal, horasExtras: breakdown2.extra, horasEspeciales: breakdown2.special,
+          hNormalesStr: breakdown2.normal.toFixed(2), hExtrasStr: breakdown2.extra.toFixed(2), hEspecialesStr: breakdown2.special.toFixed(2),
+          motorUrl: mUrl || undefined, estado: 'Registrado', fecha: nextDay,
+          descuentoAlimentacion: descuento2 > 0 ? descuento2 / 60 : 0
+        };
+
+        await setDoc(doc(firestore!, "bitacora_visitas", id1), cleanData({
+          ...docData1, inspectorId: inspectorEmail, inspectorNombre: formatTechnicianName(user?.displayName || inspectorEmail || ''),
+          fechaStr: format(reportDate, 'yyyy-MM-dd'), orderId: activeStop.orderId || null, createdAt: serverTimestamp()
+        }));
+
+        await setDoc(doc(firestore!, "bitacora_visitas", id2), cleanData({
+          ...docData2, inspectorId: inspectorEmail, inspectorNombre: formatTechnicianName(user?.displayName || inspectorEmail || ''),
+          fechaStr: format(nextDay, 'yyyy-MM-dd'), orderId: activeStop.orderId || null, createdAt: serverTimestamp()
+        }));
+        
+        if (shouldDeductAlmuerzo) {
+           const idAlm = buildVisitId(inspectorEmail, user?.displayName, reportDate) + '_ALM' + Date.now();
+           await setDoc(doc(firestore!, "bitacora_visitas", idAlm), cleanData({
+             id: idAlm, clienteId: activeStop.clienteId, clienteNombre: activeStop.clienteNombre, actividad: 'ALIMENTACION',
+             horaLlegada: '13:00', horaSalida: '14:00',
+             horasNormales: 0, horasExtras: 0, horasEspeciales: 0,
+             hNormalesStr: '0.00', hExtrasStr: '0.00', hEspecialesStr: '0.00',
+             estado: 'Registrado', fecha: reportDate,
+             inspectorId: inspectorEmail, inspectorNombre: formatTechnicianName(user?.displayName || inspectorEmail || ''),
+             fechaStr: format(reportDate, 'yyyy-MM-dd'), orderId: activeStop.orderId || null, createdAt: serverTimestamp()
+           }));
+        }
+
+        if (activeStop.orderId) {
+          try { await updateDoc(doc(firestore!, 'ordenes_trabajo', activeStop.orderId), { estado: OT_STATUS.EN_PROCESO }); } catch (e) {}
+        }
+
+        setVisitas([...visitas, docData1]); // el doc2 no se muestra hoy
+        setActiveStop(null);
+        setIsTimerPaused(false);
+        setStopTimeManual(null);
+        setOmitirAlmuerzo(false);
+        toast({ title: 'JORNADA DIVIDIDA ✅', description: 'Se generó un registro extra para el día de mañana.' });
+      } catch (err) {
+        console.error(err);
+        toast({ variant: 'destructive', title: 'Error al guardar', description: 'Revisa tu conexión e inténtalo de nuevo.' });
+      } finally { setLoading(false); }
+      return;
     }
+
+    // --- LÓGICA NORMAL (MISMO DÍA) ---
+    let diffMinutes = totalRealDiff;
+    if (shouldDeductAlmuerzo) diffMinutes -= 60;
     const totalCalculado = diffMinutes > 0 ? diffMinutes / 60 : 0;
 
     if (totalCalculado <= 0) {
       return toast({ variant: 'destructive', title: 'Error', description: 'El tiempo de permanencia debe ser mayor a 0.' });
     }
 
-    if (!window.confirm(`¿Guardar visita de ${activeStop.clienteNombre}? Tiempo total: ${totalCalculado.toFixed(2)}h`)) return;
+    if (!window.confirm(`¿Guardar visita de ${activeStop.clienteNombre}? Tiempo total: ${totalCalculado.toFixed(2)}h${shouldDeductAlmuerzo ? ' (Se descontó 1h de almuerzo)' : ''}`)) return;
 
     setLoading(true);
     try {
-      let mUrl = '';
       if (tempHours.motorFile && canUseCloud) {
         const base64 = await fileToBase64(tempHours.motorFile);
         const fRef = ref(storage!, `visitas/${inspectorEmail}/${Date.now()}_img.png`);
@@ -291,42 +411,51 @@ export default function BitacoraVisitasForm({ otFilter }: { otFilter?: string | 
       const breakdown = calculateHoursBreakdown(totalCalculado, reportDate, accumulatedNormalHours);
 
       const id = buildVisitId(inspectorEmail, user?.displayName, reportDate);
-      const docData: VisitaItem = {
+      const docData: VisitaItem & { descuentoAlimentacion?: number } = {
         id, clienteId: activeStop.clienteId, clienteNombre: activeStop.clienteNombre, actividad: activeStop.actividad,
         horaLlegada: activeStop.horaLlegada, horaSalida, ubicacionLlegada: activeStop.ubicacionLlegada,
-        horasNormales: breakdown.normal, 
-        horasExtras: breakdown.extra, 
-        horasEspeciales: breakdown.special,
-        hNormalesStr: breakdown.normal.toFixed(2), 
-        hExtrasStr: breakdown.extra.toFixed(2), 
-        hEspecialesStr: breakdown.special.toFixed(2),
-        motorUrl: mUrl || undefined, estado: 'Registrado', fecha: reportDate
+        horasNormales: breakdown.normal, horasExtras: breakdown.extra, horasEspeciales: breakdown.special,
+        hNormalesStr: breakdown.normal.toFixed(2), hExtrasStr: breakdown.extra.toFixed(2), hEspecialesStr: breakdown.special.toFixed(2),
+        motorUrl: mUrl || undefined, estado: 'Registrado', fecha: reportDate,
+        descuentoAlimentacion: shouldDeductAlmuerzo ? 1 : 0
       };
 
       await setDoc(doc(firestore!, "bitacora_visitas", id), cleanData({
-        ...docData,
-        inspectorId: inspectorEmail,
-        inspectorNombre: formatTechnicianName(user?.displayName || inspectorEmail || ''),
-        fechaStr: format(reportDate, 'yyyy-MM-dd'),
-        orderId: activeStop.orderId || null,
-        createdAt: serverTimestamp()
+        ...docData, inspectorId: inspectorEmail, inspectorNombre: formatTechnicianName(user?.displayName || inspectorEmail || ''),
+        fechaStr: format(reportDate, 'yyyy-MM-dd'), orderId: activeStop.orderId || null, createdAt: serverTimestamp()
       }));
-
-      // Actualizar estado de la OT a 'En Proceso' (Opcional, no debe bloquear el guardado)
-      if (activeStop.orderId) {
-        try {
-          await updateDoc(doc(firestore!, 'ordenes_trabajo', activeStop.orderId), { estado: OT_STATUS.EN_PROCESO });
-        } catch (e) {
-          console.warn("No se pudo actualizar el estado de la OT, pero la visita fue registrada:", e);
-        }
+      
+      if (shouldDeductAlmuerzo) {
+         const idAlm = buildVisitId(inspectorEmail, user?.displayName, reportDate) + '_ALM' + Date.now();
+         const docDataAlm = {
+           id: idAlm, clienteId: activeStop.clienteId, clienteNombre: activeStop.clienteNombre, actividad: 'ALIMENTACION',
+           horaLlegada: '13:00', horaSalida: '14:00',
+           horasNormales: 0, horasExtras: 0, horasEspeciales: 0,
+           hNormalesStr: '0.00', hExtrasStr: '0.00', hEspecialesStr: '0.00',
+           estado: 'Registrado', fecha: reportDate
+         };
+         await setDoc(doc(firestore!, "bitacora_visitas", idAlm), cleanData({
+           ...docDataAlm, inspectorId: inspectorEmail, inspectorNombre: formatTechnicianName(user?.displayName || inspectorEmail || ''),
+           fechaStr: format(reportDate, 'yyyy-MM-dd'), orderId: activeStop.orderId || null, createdAt: serverTimestamp()
+         }));
+         setVisitas(prev => [...prev, docData as VisitaItem, docDataAlm as VisitaItem]);
+      } else {
+         setVisitas(prev => [...prev, docData as VisitaItem]);
       }
 
-      setVisitas([...visitas, docData]);
+      if (activeStop.orderId) {
+        try { await updateDoc(doc(firestore!, 'ordenes_trabajo', activeStop.orderId), { estado: OT_STATUS.EN_PROCESO }); } catch (e) {}
+      }
+
       setActiveStop(null);
       setIsTimerPaused(false);
       setStopTimeManual(null);
+      setOmitirAlmuerzo(false);
       toast({ title: 'VISITA REGISTRADA ✅' });
-    } catch { toast({ variant: 'destructive', title: 'Error al guardar' }); }
+    } catch (err) { 
+      console.error(err);
+      toast({ variant: 'destructive', title: 'Error al guardar', description: 'Revisa tu conexión e inténtalo de nuevo.' }); 
+    }
     finally { setLoading(false); }
   };
 
@@ -480,6 +609,13 @@ export default function BitacoraVisitasForm({ otFilter }: { otFilter?: string | 
                 <p className="text-4xl font-black text-slate-900">{elapsedTime}<span className="text-lg ml-1 text-emerald-500">hrs</span></p>
               </div>
 
+              {parseFloat(elapsedTime) >= 8 && activeStop.actividad !== 'ALIMENTACION' && (
+                <div className="flex items-center justify-center gap-2 mb-2 bg-amber-50 p-3 rounded-xl border border-amber-200 cursor-pointer" onClick={() => setOmitirAlmuerzo(!omitirAlmuerzo)}>
+                  <input type="checkbox" id="omitirAlmuerzo" checked={omitirAlmuerzo} onChange={(e) => setOmitirAlmuerzo(e.target.checked)} onClick={(e) => e.stopPropagation()} className="w-5 h-5 rounded border-amber-300 text-amber-600 focus:ring-amber-500 cursor-pointer" />
+                  <label htmlFor="omitirAlmuerzo" className="text-[10px] font-black text-amber-800 uppercase tracking-widest cursor-pointer">Sin almuerzo por emergencia</label>
+                </div>
+              )}
+
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button
                   variant="outline"
@@ -515,13 +651,7 @@ export default function BitacoraVisitasForm({ otFilter }: { otFilter?: string | 
                 </Button>
               </div>
 
-              <div className="flex gap-3">
-                <Button variant="outline" onClick={() => { if(stopFileInputRef.current) stopFileInputRef.current.value = ''; stopFileInputRef.current?.click(); }} className={`flex-1 h-12 rounded-xl border-2 transition-all ${tempHours.motorFile ? 'bg-emerald-100 border-emerald-500 text-emerald-600' : 'bg-white/50 text-slate-400 border-transparent'}`}><Camera size={18} className="mr-2" /> CÁMARA</Button>
-                <Button variant="outline" onClick={() => { if(stopGalleryInputRef.current) stopGalleryInputRef.current.value = ''; stopGalleryInputRef.current?.click(); }} className={`flex-1 h-12 rounded-xl border-2 transition-all ${tempHours.motorFile ? 'bg-emerald-100 border-emerald-500 text-emerald-600' : 'bg-white/50 text-slate-400 border-transparent'}`}><ImageIcon size={18} className="mr-2" /> GALERÍA</Button>
-                <input type="file" ref={stopFileInputRef} hidden accept="image/*" capture="environment" onChange={e => setTempHours({ ...tempHours, motorFile: e.target.files?.[0] })} />
-                <input type="file" ref={stopGalleryInputRef} hidden accept="image/*" onChange={e => setTempHours({ ...tempHours, motorFile: e.target.files?.[0] })} />
-              </div>
-              {tempHours.motorFile && <p className="text-center text-[10px] font-black text-emerald-600 uppercase tracking-widest">EVIDENCIA ARCHIVADA ✅</p>}
+              <Button variant="outline" onClick={() => stopFileInputRef.current?.click()} className={`w-full h-12 rounded-xl border-2 transition-all ${tempHours.motorFile ? 'bg-emerald-100 border-emerald-500 text-emerald-600' : 'bg-white/50 text-slate-400 border-transparent'}`}><Camera size={18} className="mr-2" /> {tempHours.motorFile ? 'EVIDENCIA ARCHIVADA' : 'ADJUNTAR FOTO (OPCIONAL)'}<input type="file" ref={stopFileInputRef} className="hidden" onChange={e => setTempHours({ ...tempHours, motorFile: e.target.files?.[0] })} /></Button>
             </div>
           )}
         </section>
@@ -540,8 +670,17 @@ export default function BitacoraVisitasForm({ otFilter }: { otFilter?: string | 
               </div>
               <p className="font-bold text-slate-800 uppercase text-sm">{v.clienteNombre}</p>
               <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{v.horaLlegada} - {v.horaSalida}</p>
-              <div className="flex gap-2 mt-2">
-                <span className="px-2 py-1 bg-slate-50 text-slate-600 rounded-lg text-[10px] font-black border border-slate-100">{v.hNormalesStr} Horas Totales</span>
+              <div className="flex flex-col gap-1 mt-2">
+                <div className="flex gap-2">
+                  <span className="px-2 py-1 bg-slate-50 text-slate-600 rounded-lg text-[10px] font-black border border-slate-100">
+                    {v.hNormalesStr} Norm. | {v.hExtrasStr} Ext. | {v.hEspecialesStr} Esp.
+                  </span>
+                </div>
+                {(v as any).descuentoAlimentacion > 0 && (
+                  <p className="text-[9px] font-black text-amber-600 mt-1 uppercase">
+                    * Observación: se descontó {(v as any).descuentoAlimentacion}h de alimentación
+                  </p>
+                )}
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -579,11 +718,11 @@ export default function BitacoraVisitasForm({ otFilter }: { otFilter?: string | 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-[10px] font-black text-slate-900 uppercase ml-2 tracking-widest">Hora Llegada</label>
-                  <Input type="time" value={currentEditVisit.horaLlegada} onChange={e => setCurrentEditVisit({ ...currentEditVisit, horaLlegada: e.target.value })} className="h-14 rounded-2xl text-center font-black text-slate-900 bg-slate-50 border-slate-200" />
+                  <Input value={currentEditVisit.horaLlegada} onChange={e => setCurrentEditVisit({ ...currentEditVisit, horaLlegada: e.target.value })} className="h-14 rounded-2xl text-center font-black text-slate-900 bg-slate-50 border-slate-200" />
                 </div>
                 <div className="space-y-1">
                   <label className="text-[10px] font-black text-slate-900 uppercase ml-2 tracking-widest">Hora Salida</label>
-                  <Input type="time" value={currentEditVisit.horaSalida} onChange={e => setCurrentEditVisit({ ...currentEditVisit, horaSalida: e.target.value })} className="h-14 rounded-2xl text-center font-black text-slate-900 bg-slate-50 border-slate-200" />
+                  <Input value={currentEditVisit.horaSalida} onChange={e => setCurrentEditVisit({ ...currentEditVisit, horaSalida: e.target.value })} className="h-14 rounded-2xl text-center font-black text-slate-900 bg-slate-50 border-slate-200" />
                 </div>
               </div>
 
@@ -600,15 +739,10 @@ export default function BitacoraVisitasForm({ otFilter }: { otFilter?: string | 
                     if (!canUseCloud) return toast({ variant: 'destructive', title: 'Sin conexión' });
                     setLoading(true);
                     try {
-                      const timeRegex = /^\d{2}:\d{2}$/;
-                      if (!timeRegex.test(currentEditVisit.horaLlegada) || !timeRegex.test(currentEditVisit.horaSalida)) {
-                        toast({ variant: 'destructive', title: 'Formato inválido', description: 'Las horas deben tener formato HH:mm' });
-                        setLoading(false);
-                        return;
-                      }
                       const arrivalDate = parse(currentEditVisit.horaLlegada, 'HH:mm', new Date());
                       const stopDate = parse(currentEditVisit.horaSalida, 'HH:mm', new Date());
-                      const diffMinutes = differenceInMinutes(stopDate, arrivalDate);
+                      let diffMinutes = differenceInMinutes(stopDate, arrivalDate);
+                      if (diffMinutes < 0) diffMinutes += 1440; // Soporte básico para cruce de medianoche en edición
                       const total = diffMinutes > 0 ? diffMinutes / 60 : 0;
                       
                       // Para calcular el accumulated de forma justa en edición, restamos el valor de la visita actual de la suma

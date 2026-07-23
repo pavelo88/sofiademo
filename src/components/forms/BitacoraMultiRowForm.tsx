@@ -21,6 +21,7 @@ type RowData = {
   actividad: string;
   horaLlegada: string;
   horaSalida: string;
+  omitirAlmuerzo?: boolean;
 };
 
 interface Props {
@@ -43,7 +44,8 @@ export default function BitacoraMultiRowForm({ reportDate, clients, activeOTs, i
     clienteNombre: '',
     actividad: 'Inspección',
     horaLlegada: '',
-    horaSalida: ''
+    horaSalida: '',
+    omitirAlmuerzo: false
   }]);
   const [loading, setLoading] = useState(false);
 
@@ -55,7 +57,8 @@ export default function BitacoraMultiRowForm({ reportDate, clients, activeOTs, i
       clienteNombre: '',
       actividad: 'Inspección',
       horaLlegada: '',
-      horaSalida: ''
+      horaSalida: '',
+      omitirAlmuerzo: false
     }]);
   };
 
@@ -63,7 +66,7 @@ export default function BitacoraMultiRowForm({ reportDate, clients, activeOTs, i
     setRows(rows.filter(r => r.id !== id));
   };
 
-  const updateRow = (id: string, field: keyof RowData, value: string) => {
+  const updateRow = (id: string, field: keyof RowData, value: any) => {
     setRows(rows.map(r => {
       if (r.id === id) {
         const newRow = { ...r, [field]: value };
@@ -75,11 +78,11 @@ export default function BitacoraMultiRowForm({ reportDate, clients, activeOTs, i
             newRow.clienteNombre = ot.clienteNombre || ot.cliente || '';
           }
         } else if (field === 'orderId' && value === 'none') {
-            newRow.orderId = '';
+          newRow.orderId = '';
         }
-        
+
         if (field === 'clienteId') {
-            newRow.clienteNombre = value === 'OFICINA' ? 'OFICINA' : clients.find(c => c.id === value)?.nombre || '';
+          newRow.clienteNombre = value === 'OFICINA' ? 'OFICINA' : clients.find(c => c.id === value)?.nombre || '';
         }
         return newRow;
       }
@@ -100,66 +103,132 @@ export default function BitacoraMultiRowForm({ reportDate, clients, activeOTs, i
       const nuevasVisitas: any[] = [];
       let currentAccumulatedNormal = existingVisitas.reduce((sum, v) => sum + (v.horasNormales || 0), 0);
 
+      let didCrossDay = false;
+
       // Ordenar las filas por horaLlegada para procesar secuencialmente (cronológicamente)
       const sortedRows = [...validRows].sort((a, b) => a.horaLlegada.localeCompare(b.horaLlegada));
 
       for (const row of sortedRows) {
-        const arrivalDate = parse(row.horaLlegada, 'HH:mm', new Date());
-        const stopDate = parse(row.horaSalida, 'HH:mm', new Date());
-        let diffMinutes = differenceInMinutes(stopDate, arrivalDate);
-        if (diffMinutes < 0) diffMinutes += 1440; // Cruce de medianoche
-        
-        let total = diffMinutes > 0 ? diffMinutes / 60 : 0;
-        
-        // Si es ALMUERZO, no suma tiempo a la producción.
-        if (row.actividad === 'ALMUERZO') {
-            total = 0;
+        const arrivalDate = parse(row.horaLlegada, 'HH:mm', reportDate);
+        const stopDate = parse(row.horaSalida, 'HH:mm', reportDate);
+
+        let totalRealDiff = differenceInMinutes(stopDate, arrivalDate);
+        if (totalRealDiff < 0) totalRealDiff += 1440;
+        const isCrossDay = differenceInMinutes(stopDate, arrivalDate) < 0;
+
+        const shouldDeductAlmuerzo = totalRealDiff >= 480 && !row.omitirAlmuerzo && row.actividad !== 'ALIMENTACION';
+
+        if (isCrossDay) {
+          didCrossDay = true;
+          const eodDate = new Date(arrivalDate);
+          eodDate.setHours(23, 59, 0, 0);
+          let diff1 = differenceInMinutes(eodDate, arrivalDate);
+          
+          let descuento1 = 0;
+          let descuento2 = 0;
+          if (shouldDeductAlmuerzo) {
+            if (diff1 >= 60) {
+              descuento1 = 60;
+              diff1 -= 60;
+            } else {
+              descuento1 = diff1;
+              descuento2 = 60 - diff1;
+              diff1 = 0;
+            }
+          }
+          
+          const total1 = diff1 > 0 ? (row.actividad === 'ALMUERZO' ? 0 : diff1 / 60) : 0;
+          const breakdown1 = calculateHoursBreakdown(total1, reportDate, currentAccumulatedNormal);
+          currentAccumulatedNormal += breakdown1.normal;
+
+          const id1 = buildVisitId(inspectorEmail, user?.displayName, reportDate) + `_${Math.floor(Math.random() * 10000)}_P1`;
+          const docData1 = {
+            id: id1, clienteId: row.clienteId, clienteNombre: row.clienteNombre, actividad: row.actividad,
+            horaLlegada: row.horaLlegada, horaSalida: '23:59',
+            horasNormales: breakdown1.normal, horasExtras: breakdown1.extra, horasEspeciales: breakdown1.special,
+            hNormalesStr: breakdown1.normal.toFixed(2), hExtrasStr: breakdown1.extra.toFixed(2), hEspecialesStr: breakdown1.special.toFixed(2),
+            estado: 'Registrado', fecha: reportDate, inspectorId: inspectorEmail,
+            inspectorNombre: formatTechnicianName(user?.displayName || inspectorEmail || ''),
+            fechaStr: format(reportDate, 'yyyy-MM-dd'), orderId: row.orderId || null, createdAt: serverTimestamp(),
+            descuentoAlimentacion: descuento1 > 0 ? descuento1 / 60 : 0
+          };
+          batch.set(doc(firestore!, "bitacora_visitas", id1), docData1);
+          nuevasVisitas.push(docData1);
+
+          const nextDay = new Date(reportDate);
+          nextDay.setDate(nextDay.getDate() + 1);
+          const startOfDay = parse('00:00', 'HH:mm', reportDate);
+          let diff2 = differenceInMinutes(stopDate, startOfDay);
+          if (descuento2 > 0) diff2 -= descuento2;
+          
+          const total2 = diff2 > 0 ? (row.actividad === 'ALMUERZO' ? 0 : diff2 / 60) : 0;
+          const breakdown2 = {
+            normal: 0,
+            extra: 0,
+            special: Number(total2.toFixed(2))
+          };
+
+          const id2 = buildVisitId(inspectorEmail, user?.displayName, nextDay) + `_${Math.floor(Math.random() * 10000)}_P2`;
+          const docData2 = {
+            id: id2, clienteId: row.clienteId, clienteNombre: row.clienteNombre, actividad: row.actividad,
+            horaLlegada: '00:00', horaSalida: row.horaSalida,
+            horasNormales: breakdown2.normal, horasExtras: breakdown2.extra, horasEspeciales: breakdown2.special,
+            hNormalesStr: breakdown2.normal.toFixed(2), hExtrasStr: breakdown2.extra.toFixed(2), hEspecialesStr: breakdown2.special.toFixed(2),
+            estado: 'Registrado', fecha: nextDay, inspectorId: inspectorEmail,
+            inspectorNombre: formatTechnicianName(user?.displayName || inspectorEmail || ''),
+            fechaStr: format(nextDay, 'yyyy-MM-dd'), orderId: row.orderId || null, createdAt: serverTimestamp(),
+            descuentoAlimentacion: descuento2 > 0 ? descuento2 / 60 : 0
+          };
+          batch.set(doc(firestore!, "bitacora_visitas", id2), docData2);
+        } else {
+          let finalDiff = totalRealDiff;
+          if (shouldDeductAlmuerzo) finalDiff -= 60;
+          let total = finalDiff > 0 ? (row.actividad === 'ALMUERZO' ? 0 : finalDiff / 60) : 0;
+          const breakdown = calculateHoursBreakdown(total, reportDate, currentAccumulatedNormal);
+          currentAccumulatedNormal += breakdown.normal;
+
+          const docId = buildVisitId(inspectorEmail, user?.displayName, reportDate) + `_${Math.floor(Math.random() * 10000)}`;
+          const docData = {
+            id: docId, clienteId: row.clienteId, clienteNombre: row.clienteNombre, actividad: row.actividad,
+            horaLlegada: row.horaLlegada, horaSalida: row.horaSalida,
+            horasNormales: breakdown.normal, horasExtras: breakdown.extra, horasEspeciales: breakdown.special,
+            hNormalesStr: breakdown.normal.toFixed(2), hExtrasStr: breakdown.extra.toFixed(2), hEspecialesStr: breakdown.special.toFixed(2),
+            estado: 'Registrado', fecha: reportDate, inspectorId: inspectorEmail,
+            inspectorNombre: formatTechnicianName(user?.displayName || inspectorEmail || ''),
+            fechaStr: format(reportDate, 'yyyy-MM-dd'), orderId: row.orderId || null, createdAt: serverTimestamp(),
+            descuentoAlimentacion: shouldDeductAlmuerzo ? 1 : 0
+          };
+
+          batch.set(doc(firestore!, "bitacora_visitas", docId), docData);
+          nuevasVisitas.push(docData);
         }
 
-        const breakdown = calculateHoursBreakdown(total, reportDate, currentAccumulatedNormal);
-        
-        // Actualizamos el acumulado con las horas normales de esta fila
-        currentAccumulatedNormal += breakdown.normal;
+        if (shouldDeductAlmuerzo) {
+           const idAlm = buildVisitId(inspectorEmail, user?.displayName, reportDate) + '_ALM' + Date.now() + Math.floor(Math.random() * 1000);
+           const docDataAlm = {
+             id: idAlm, clienteId: row.clienteId, clienteNombre: row.clienteNombre, actividad: 'ALIMENTACION',
+             horaLlegada: '13:00', horaSalida: '14:00',
+             horasNormales: 0, horasExtras: 0, horasEspeciales: 0,
+             hNormalesStr: '0.00', hExtrasStr: '0.00', hEspecialesStr: '0.00',
+             estado: 'Registrado', fecha: reportDate,
+             inspectorId: inspectorEmail, inspectorNombre: formatTechnicianName(user?.displayName || inspectorEmail || ''),
+             fechaStr: format(reportDate, 'yyyy-MM-dd'), orderId: row.orderId || null, createdAt: serverTimestamp()
+           };
+           batch.set(doc(firestore!, "bitacora_visitas", idAlm), docDataAlm);
+           nuevasVisitas.push(docDataAlm);
+        }
 
-        // Utilizamos Date.now() + index para asegurar IDs únicos en el batch de un mismo día
-        const uniqueSuffix = Math.floor(Math.random() * 10000).toString();
-        const docId = buildVisitId(inspectorEmail, user?.displayName, reportDate) + `_${uniqueSuffix}`;
-
-        const docData = {
-          id: docId,
-          clienteId: row.clienteId,
-          clienteNombre: row.clienteNombre,
-          actividad: row.actividad,
-          horaLlegada: row.horaLlegada,
-          horaSalida: row.horaSalida,
-          horasNormales: breakdown.normal,
-          horasExtras: breakdown.extra,
-          horasEspeciales: breakdown.special,
-          hNormalesStr: breakdown.normal.toFixed(2),
-          hExtrasStr: breakdown.extra.toFixed(2),
-          hEspecialesStr: breakdown.special.toFixed(2),
-          estado: 'Registrado',
-          fecha: reportDate,
-          inspectorId: inspectorEmail,
-          inspectorNombre: formatTechnicianName(user?.displayName || inspectorEmail || ''),
-          fechaStr: format(reportDate, 'yyyy-MM-dd'),
-          orderId: row.orderId || null,
-          createdAt: serverTimestamp()
-        };
-
-        const docRef = doc(firestore!, "bitacora_visitas", docId);
-        batch.set(docRef, docData);
-        
         if (row.orderId && row.orderId !== 'none') {
-           const otRef = doc(firestore!, "ordenes_trabajo", row.orderId);
-           batch.update(otRef, { estado: OT_STATUS.EN_PROCESO });
+          batch.update(doc(firestore!, 'ordenes_trabajo', row.orderId), { estado: OT_STATUS.EN_PROCESO });
         }
-
-        nuevasVisitas.push(docData);
       }
 
       await batch.commit();
-      toast({ title: '¡Jornada Guardada!', description: `Se han registrado ${validRows.length} actividades.` });
+      if (didCrossDay) {
+        toast({ title: 'VISITAS GUARDADAS ✅', description: 'Se generaron registros automáticos para el día siguiente por cruce de medianoche.' });
+      } else {
+        toast({ title: '¡Jornada Guardada!', description: `Se han registrado ${validRows.length} actividades.` });
+      }
       onSuccess(nuevasVisitas);
       setRows([{
         id: Date.now().toString(),
@@ -170,7 +239,7 @@ export default function BitacoraMultiRowForm({ reportDate, clients, activeOTs, i
         horaLlegada: '',
         horaSalida: ''
       }]);
-      
+
     } catch (e) {
       console.error(e);
       toast({ variant: 'destructive', title: 'Error al guardar', description: 'Revisa tu conexión e intenta de nuevo.' });
@@ -183,7 +252,7 @@ export default function BitacoraMultiRowForm({ reportDate, clients, activeOTs, i
     <div className="bg-white p-6 rounded-[2rem] shadow-sm border-2 border-slate-100 animate-in zoom-in-95 duration-300">
       <div className="mb-4">
         <h3 className="font-black text-slate-900 uppercase text-sm tracking-widest flex items-center gap-2">
-          Registro Múltiple (Batch)
+          Registro Múltiple
         </h3>
         <p className="text-xs text-slate-500">Añade varias tareas de tu día y guárdalas juntas.</p>
       </div>
@@ -235,6 +304,23 @@ export default function BitacoraMultiRowForm({ reportDate, clients, activeOTs, i
                 </td>
                 <td className="p-2">
                   <Input type="time" value={row.horaSalida} onChange={(e) => updateRow(row.id, 'horaSalida', e.target.value)} className="h-12 rounded-xl bg-slate-50 border-slate-200 font-black text-center" />
+                  {row.horaLlegada && row.horaSalida && (() => {
+                    try {
+                      const d1 = parse(row.horaLlegada, 'HH:mm', new Date());
+                      const d2 = parse(row.horaSalida, 'HH:mm', new Date());
+                      let diff = differenceInMinutes(d2, d1);
+                      if (diff < 0) diff += 1440;
+                      if (diff >= 480 && row.actividad !== 'ALMUERZO' && row.actividad !== 'ALIMENTACION') {
+                        return (
+                          <div className="mt-2 flex items-center justify-center gap-1 cursor-pointer bg-amber-50 p-1.5 rounded-lg border border-amber-200" onClick={() => updateRow(row.id, 'omitirAlmuerzo', !row.omitirAlmuerzo)}>
+                            <input type="checkbox" checked={row.omitirAlmuerzo || false} onChange={(e) => updateRow(row.id, 'omitirAlmuerzo', e.target.checked)} onClick={(e) => e.stopPropagation()} className="w-3 h-3 text-amber-600 rounded border-amber-300 focus:ring-amber-500 cursor-pointer" />
+                            <span className="text-[8px] text-amber-700 font-black uppercase leading-none cursor-pointer">Sin almuerzo</span>
+                          </div>
+                        );
+                      }
+                    } catch(e) {}
+                    return null;
+                  })()}
                 </td>
                 <td className="p-2 text-center">
                   <Button variant="ghost" size="icon" onClick={() => removeRow(row.id)} className="text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg">
@@ -253,7 +339,7 @@ export default function BitacoraMultiRowForm({ reportDate, clients, activeOTs, i
         </Button>
         <Button onClick={handleSave} disabled={loading} className="h-14 rounded-2xl bg-[#165a30] text-white hover:bg-[#062113] font-black text-xs uppercase tracking-widest px-8 shadow-xl shadow-[#165a30]/20 w-full sm:w-auto transition-all active:scale-95">
           {loading ? <Loader2 className="animate-spin mr-2" /> : <Save size={18} className="mr-2" />}
-          Guardar Jornada en Batch
+          Guardar Jornada
         </Button>
       </div>
     </div>

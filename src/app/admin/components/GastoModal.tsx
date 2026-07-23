@@ -97,7 +97,10 @@ export default function GastoModal({ isOpen, onClose, record, onSaved, db, clien
       if (record && record.id) await updateDoc(targetDocRef, cleanPayload as any);
       else await setDoc(targetDocRef, { ...cleanPayload, estado: 'Registrado', createdAt: serverTimestamp() });
       onSaved(); onClose();
-    } catch (e) { console.error(e); } finally { setLoading(false); }
+    } catch (e) { 
+      console.error(e); 
+      toast({ variant: 'destructive', title: 'Error al registrar el gasto', description: 'Revisa tu conexión a internet y vuelve a intentarlo.' });
+    } finally { setLoading(false); }
   };
 
   return (

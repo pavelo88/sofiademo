@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ArrowRight, Zap } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import Stats from './stats';
 
@@ -17,7 +18,7 @@ export default function Hero() {
 
       {/* FONDO EXCLUSIVO DEL HERO (hero.png) */}
       <div className="absolute inset-0 -z-20">
-        <img src="/hero.png" alt="Fondo Hero Energy Engine" className="w-full h-full object-cover object-center" />
+        <Image src="/hero.png" alt="Fondo Hero Energy Engine" fill className="object-cover object-center" priority />
         {/* Un degradado sutil que oscurece/aclara SOLO la parte del texto (izquierda) para legibilidad, dejando el lado derecho libre para ver el motor */}
         <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/40 to-transparent dark:from-slate-950/95 dark:via-slate-950/60 dark:to-transparent" />
       </div>
