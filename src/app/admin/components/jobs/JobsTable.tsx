@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { cn, formatSafeDate } from '@/lib/utils';
-import { CheckCircle2, Trash2 } from 'lucide-react';
+import { CheckCircle2, CheckSquare, Square, Trash2 } from 'lucide-react';
 
 interface Job {
   id: string;
@@ -16,6 +16,7 @@ interface Job {
   fecha_creacion: any;
   formType?: string;
   sourceCollection?: string;
+  facturada?: boolean;
 }
 
 interface JobsTableProps {
@@ -27,6 +28,7 @@ interface JobsTableProps {
   setStatusFilter: (f: 'active' | 'completed' | 'all') => void;
   handleDeleteJob: (job: Job) => void;
   handleApproveJob: (id: string, status: string) => void;
+  handleToggleFacturada?: (job: Job) => void;
   getJobTitle: (job: Job) => string;
 }
 
@@ -39,6 +41,7 @@ export default function JobsTable({
   setStatusFilter,
   handleDeleteJob,
   handleApproveJob,
+  handleToggleFacturada,
   getJobTitle
 }: JobsTableProps) {
   if (loading) return <p className="text-center font-black uppercase text-slate-200 py-20">Analizando Trabajos...</p>;
@@ -80,95 +83,129 @@ export default function JobsTable({
               <th className="px-6 py-4">Cliente</th>
               <th className="px-6 py-4">Ubicación</th>
               <th className="px-6 py-4 text-center">Prioridad</th>
-              <th className="px-6 py-4 text-right"></th>
+              <th className="px-3 py-4 text-center w-12" title="C (Completada)">C</th>
+              <th className="px-3 py-4 text-center w-12" title="E (Eliminar)">E</th>
+              <th className="px-3 py-4 text-center w-12" title="F (Facturada)">F</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-50">
-            {jobs.map(job => (
-              <tr 
-                key={job.id} 
-                onClick={() => setSelectedOT(selectedOT?.id === job.id ? null : job)}
-                className={cn(
-                  "group hover:bg-slate-50/80 transition-all cursor-pointer",
-                  selectedOT?.id === job.id && "bg-primary/5"
-                )}
-              >
-                <td className="px-6 py-5">
-                  <div className="flex flex-col items-center">
-                    <span className="text-xs font-black text-slate-900 bg-slate-100 px-3 py-1 rounded-md min-w-[100px] text-center">
-                      {(job as any).numero_final || job.numero_informe || job.id}
-                    </span>
-                    {(job as any).numero_final && job.numero_informe && (job as any).numero_final !== job.numero_informe && (
-                      <span className="text-[9px] font-bold text-slate-400 mt-1 italic">
-                        ({job.numero_informe})
+            {jobs.map(job => {
+              const isFacturada = Boolean(job.facturada);
+              const isSelected = selectedOT?.id === job.id;
+              return (
+                <tr 
+                  key={job.id} 
+                  onClick={() => setSelectedOT(isSelected ? null : job)}
+                  className={cn(
+                    "group transition-all cursor-pointer border-b border-slate-50/80",
+                    isFacturada 
+                      ? "bg-emerald-50/80 hover:bg-emerald-100/70 text-slate-900 border-l-4 border-l-emerald-500" 
+                      : isSelected 
+                        ? "bg-primary/5 hover:bg-slate-50/80" 
+                        : "hover:bg-slate-50/80"
+                  )}
+                >
+                  <td className="px-6 py-5">
+                    <div className="flex flex-col items-center">
+                      <span className="text-xs font-black text-slate-900 bg-slate-100 px-3 py-1 rounded-md min-w-[100px] text-center">
+                        {(job as any).numero_final || job.numero_informe || job.id}
                       </span>
-                    )}
-                  </div>
-                </td>
-                <td className="px-6 py-5">
-                  <div className="font-bold text-slate-800 text-sm">{getJobTitle(job)}</div>
-                  <div className="text-[9px] font-black text-slate-400 uppercase">{job.formType || 'GENERAL'}</div>
-                </td>
-                <td className="px-6 py-5 text-center">
-                  <span className={cn(
-                    "px-2 py-1 text-[8px] font-black rounded-full uppercase border",
-                    job.estado === 'Completada' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 
-                    job.estado === 'En Proceso' ? 'bg-amber-50 text-amber-600 border-amber-200' : 
-                    'bg-blue-50 text-blue-600 border-blue-200'
-                  )}>
-                    {job.estado || 'Registrada'}
-                  </span>
-                </td>
-                <td className="px-6 py-5 text-center">
-                  <div className="text-xs font-bold text-slate-600">{formatSafeDate(job.fecha_creacion, 'dd/MM/yyyy')}</div>
-                </td>
-                <td className="px-6 py-5">
-                  <div className="text-xs font-black text-slate-700 uppercase">{job.clienteNombre || job.cliente || '—'}</div>
-                </td>
-                <td className="px-6 py-5">
-                  <div className="text-[10px] font-bold text-slate-500 max-w-[150px] truncate uppercase">{job.instalacion || '—'}</div>
-                </td>
-                <td className="px-6 py-5 text-center">
-                  <span className={cn(
-                    "text-[10px] font-black uppercase",
-                    job.prioridad === 'Alta' ? 'text-red-500' : job.prioridad === 'Media' ? 'text-amber-500' : 'text-blue-500'
-                  )}>
-                    {job.prioridad || 'Media'}
-                  </span>
-                </td>
-                <td className="px-6 py-5 text-right">
-                  <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {(job as any).numero_final && job.numero_informe && (job as any).numero_final !== job.numero_informe && (
+                        <span className="text-[9px] font-bold text-slate-400 mt-1 italic">
+                          ({job.numero_informe})
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-5">
+                    <div className="font-bold text-slate-800 text-sm">{getJobTitle(job)}</div>
+                    <div className="text-[9px] font-black text-slate-400 uppercase">{job.formType || 'GENERAL'}</div>
+                  </td>
+                  <td className="px-6 py-5 text-center">
+                    <span className={cn(
+                      "px-2 py-1 text-[8px] font-black rounded-full uppercase border",
+                      job.estado === 'Completada' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 
+                      job.estado === 'En Proceso' ? 'bg-amber-50 text-amber-600 border-amber-200' : 
+                      'bg-blue-50 text-blue-600 border-blue-200'
+                    )}>
+                      {job.estado || 'Registrada'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-5 text-center">
+                    <div className="text-xs font-bold text-slate-600">{formatSafeDate(job.fecha_creacion, 'dd/MM/yyyy')}</div>
+                  </td>
+                  <td className="px-6 py-5">
+                    <div className="text-xs font-black text-slate-700 uppercase">{job.clienteNombre || job.cliente || '—'}</div>
+                  </td>
+                  <td className="px-6 py-5">
+                    <div className="text-[10px] font-bold text-slate-500 max-w-[150px] truncate uppercase">{job.instalacion || '—'}</div>
+                  </td>
+                  <td className="px-6 py-5 text-center">
+                    <span className={cn(
+                      "text-[10px] font-black uppercase",
+                      job.prioridad === 'Alta' ? 'text-red-500' : job.prioridad === 'Media' ? 'text-amber-500' : 'text-blue-500'
+                    )}>
+                      {job.prioridad || 'Media'}
+                    </span>
+                  </td>
+
+                  {/* Columna C: Completada */}
+                  <td className="px-3 py-5 text-center">
                     <Button
                       variant="ghost"
                       size="icon"
+                      title="Marcar como Completada (C)"
                       onClick={(e) => { e.stopPropagation(); handleApproveJob(job.id, job.estado); }}
                       disabled={job.estado === 'Completada'}
                       className={cn(
-                        "h-8 w-8 text-slate-400 hover:text-emerald-600",
-                        job.estado === 'Completada' && "opacity-20 cursor-not-allowed"
+                        "h-8 w-8 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50",
+                        job.estado === 'Completada' && "text-emerald-600 font-bold opacity-100 cursor-not-allowed"
                       )}
                     >
-                      <CheckCircle2 size={14} />
+                      <CheckCircle2 size={16} />
                     </Button>
+                  </td>
+
+                  {/* Columna E: Eliminar */}
+                  <td className="px-3 py-5 text-center">
                     <Button
                       variant="ghost"
                       size="icon"
+                      title="Eliminar orden (E)"
                       onClick={(e) => { e.stopPropagation(); handleDeleteJob(job); }}
                       disabled={job.estado === 'Completada'}
                       className={cn(
-                        "h-8 w-8 text-slate-400 hover:text-red-500",
+                        "h-8 w-8 text-slate-400 hover:text-red-500 hover:bg-red-50",
                         job.estado === 'Completada' && "opacity-20 cursor-not-allowed"
                       )}
                     >
-                      <Trash2 size={14} />
+                      <Trash2 size={16} />
                     </Button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  </td>
+
+                  {/* Columna F: Facturada */}
+                  <td className="px-3 py-5 text-center">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      title={isFacturada ? "Desmarque si marcó por error" : "Marque aquí si fue facturado"}
+                      onClick={(e) => { e.stopPropagation(); handleToggleFacturada?.(job); }}
+                      className={cn(
+                        "h-8 w-8 transition-colors",
+                        isFacturada 
+                          ? "bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm" 
+                          : "text-slate-400 hover:text-emerald-600 hover:bg-emerald-50"
+                      )}
+                    >
+                      {isFacturada ? <CheckSquare size={16} /> : <Square size={16} />}
+                    </Button>
+                  </td>
+                </tr>
+              );
+            })}
             {jobs.length === 0 && (
               <tr>
-                <td colSpan={8} className="py-20 text-center text-xs font-black text-slate-300 uppercase italic tracking-widest">
+                <td colSpan={10} className="py-20 text-center text-xs font-black text-slate-300 uppercase italic tracking-widest">
                   No hay órdenes de trabajo registradas
                 </td>
               </tr>

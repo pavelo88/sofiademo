@@ -525,6 +525,24 @@ export default function JobsPage() {
     }
   };
 
+  const handleToggleFacturada = async (job: any) => {
+    if (!db) return;
+    const isFacturada = !job.facturada;
+    try {
+      await updateDoc(doc(db, job.sourceCollection || 'ordenes_trabajo', job.id), {
+        facturada: isFacturada,
+        fecha_facturacion: isFacturada ? serverTimestamp() : null
+      });
+      toast({
+        title: isFacturada ? "OT Facturada" : "Facturación Desmarcada",
+        description: `La orden ${job.numero_final || job.numero_informe || job.id} ha sido ${isFacturada ? 'marcada como facturada' : 'desmarcada'}.`
+      });
+    } catch (error) {
+      console.error("Error al actualizar estado de facturación:", error);
+      toast({ variant: "destructive", title: "Error", description: "No se pudo actualizar el estado de facturación." });
+    }
+  };
+
   const handleReprintSavedPdf = async (job: any) => {
     const finalId = getReportDisplayId(job) || job.numero_informe || job.id;
     const individualId = job.numero_final ? (getCreationReportId(job) || null) : null;
@@ -689,6 +707,7 @@ export default function JobsPage() {
           setStatusFilter={setStatusFilter}
           handleDeleteJob={handleDeleteJob}
           handleApproveJob={handleApproveJob}
+          handleToggleFacturada={handleToggleFacturada}
           getJobTitle={getJobTitle}
         />
       ) : (
