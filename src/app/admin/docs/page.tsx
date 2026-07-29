@@ -12,10 +12,13 @@ import {
   Smartphone,
   Zap
 } from 'lucide-react';
+import { useAdminHeader } from '../components/AdminHeaderContext';
 import { ArchitectureCard } from './components/ArchitectureCard';
 import { CodeBlock } from './components/CodeBlock';
 
 export default function TechnicalDocsPage() {
+  useAdminHeader('Arquitectura del Sistema');
+
   return (
     <div className="space-y-8 pb-20">
       {/* Hero Section */}
@@ -25,14 +28,13 @@ export default function TechnicalDocsPage() {
         </div>
         <div className="relative z-10">
           <Badge className="mb-4 bg-emerald-500 hover:bg-emerald-600 border-none px-4 py-1 text-xs font-black uppercase tracking-tighter">
-            Senior Auditor Access
+            Página de Prueba
           </Badge>
           <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-2">
-            Arquitectura del Sistema
+            Infraestructura
           </h1>
           <p className="text-slate-400 max-w-2xl text-lg leading-relaxed font-medium">
-            Desglose técnico de la infraestructura, patrones de diseño y lógica de sincronización offline 
-            diseñada para la gestión operativa e inspección técnica de Nombre de tu Empresa.
+            [PÁGINA DE PRUEBA] Toda la información, textos y diagramas de esta sección son meramente demostrativos. Puedes reemplazarlos fácilmente con la arquitectura real de tu proyecto.
           </p>
         </div>
       </div>
