@@ -45,7 +45,7 @@ const suggestCorrectionsFlow = ai.defineFlow(
     inputSchema: SuggestCorrectionsInputSchema,
     outputSchema: SuggestCorrectionsOutputSchema,
   },
-  async (input) => {
+  async (input: z.infer<typeof SuggestCorrectionsInputSchema>) => {
     const { output } = await suggestCorrectionsPrompt(input);
     return output!;
   }

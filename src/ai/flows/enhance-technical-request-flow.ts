@@ -54,7 +54,7 @@ const enhanceTechnicalRequestFlow = ai.defineFlow(
     inputSchema: EnhanceTechnicalRequestInputSchema,
     outputSchema: EnhanceTechnicalRequestOutputSchema,
   },
-  async input => {
+  async (input: z.infer<typeof EnhanceTechnicalRequestInputSchema>) => {
     const {output} = await enhanceTechnicalRequestPrompt(input);
     return output!;
   }

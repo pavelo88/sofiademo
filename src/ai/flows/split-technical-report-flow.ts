@@ -64,7 +64,7 @@ const splitTechnicalReportFlow = ai.defineFlow(
     inputSchema: SplitTechnicalReportInputSchema,
     outputSchema: SplitTechnicalReportOutputSchema,
   },
-  async input => {
+  async (input: z.infer<typeof SplitTechnicalReportInputSchema>) => {
     const {output} = await splitTechnicalReportPrompt(input);
     return output!;
   }

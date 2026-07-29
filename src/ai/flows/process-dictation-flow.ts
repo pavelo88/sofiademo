@@ -116,7 +116,7 @@ const processDictationFlow = ai.defineFlow(
     inputSchema: ProcessDictationInputSchema,
     outputSchema: ProcessDictationOutputSchema,
   },
-  async input => {
+  async (input: z.infer<typeof ProcessDictationInputSchema>) => {
     const {output} = await processDictationPrompt(input);
     return output!;
   }

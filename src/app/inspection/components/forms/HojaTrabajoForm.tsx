@@ -332,6 +332,7 @@ export default function HojaTrabajoForm({
     n_motor: '',
     grupo: '',
     n_grupo: '',
+    potencia: '',
     n_pedido: '',
     location: null as { lat: number, lon: number } | null,
     fecha: new Date().toISOString().split('T')[0],
