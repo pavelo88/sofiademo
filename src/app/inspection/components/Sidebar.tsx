@@ -44,9 +44,9 @@ export default function Sidebar({ activeTab, onNavigate }: SidebarProps) {
     <aside className="hidden xl:flex w-80 bg-white/60 backdrop-blur-xl flex-col p-8 sticky top-0 h-screen border-r border-white/80 shadow-lg">
       
       {/* Logo de la compañía */}
-      <div className="mb-12 border-l-4 border-blue-600 pl-6">
-        <span className="font-black italic text-3xl tracking-tighter block leading-none text-slate-900">energy</span>
-        <span className="font-black italic text-3xl tracking-tighter block leading-none text-blue-600">engine</span>
+      <div className="mb-12 border-l-4 border-cyan-500 pl-6">
+        <span className="font-black italic text-3xl tracking-tighter block leading-none text-slate-900">soft<span className="text-cyan-500">IA</span></span>
+        <span className="font-black italic text-2xl tracking-tighter block leading-none text-cyan-600">tech</span>
         <p className="text-[9px] text-slate-500 font-black tracking-[0.4em] uppercase mt-2">Professional Suite</p>
       </div>
 

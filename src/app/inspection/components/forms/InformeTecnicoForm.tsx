@@ -518,7 +518,7 @@ export default function InformeTecnicoForm({ initialData, aiData, onSuccess, isA
           estado: finalEstado,
           ultimaModificacion: Timestamp.now(),
           modificadoPorId: user?.email || inspectorEmail,
-          modificadoPorNombre: inspectorName || user?.displayName || 'Inspector Energy Engine',
+          modificadoPorNombre: inspectorName || user?.displayName || 'Inspector Técnico',
           ...(isAdmin && finalEstado === 'Aprobado' ? { aprobadoPor: 'Admin', fecha_aprobacion: Timestamp.now() } : {})
         };
 
@@ -795,7 +795,7 @@ export default function InformeTecnicoForm({ initialData, aiData, onSuccess, isA
             ...formData,
             ultimaModificacion: Timestamp.now(),
             modificadoPorId: user?.email || inspectorEmail,
-            modificadoPorNombre: inspectorName || user?.displayName || 'Inspector Energy Engine',
+            modificadoPorNombre: inspectorName || user?.displayName || 'Inspector Técnico',
           },
           images,
           formType: 'informe-tecnico',

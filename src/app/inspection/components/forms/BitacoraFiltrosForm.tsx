@@ -883,7 +883,7 @@ export default function BitacoraFiltrosForm({ initialData }: { initialData?: any
                     <div className="w-10 h-10 bg-[#165a30] rounded-xl flex items-center justify-center text-white shadow-lg shadow-[#165a30]/20">
                       <ShieldCheck size={24} />
                     </div>
-                    <span className="text-[10px] font-black tracking-[0.3em] uppercase text-[#165a30]">Energy Engine • Technical Report</span>
+                    <span className="text-[10px] font-black tracking-[0.3em] uppercase text-cyan-600">SoftIA Tech • Technical Report</span>
                   </div>
                   <DialogTitle className="text-4xl font-black uppercase tracking-tighter leading-none">
                     {selectedEntry.instalacion}
@@ -1029,7 +1029,7 @@ export default function BitacoraFiltrosForm({ initialData }: { initialData?: any
 
               <div className="p-8 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                  <ShieldCheck size={14} className="text-[#165a30]" /> Documento Verificado por Energy Engine Cloud
+                  <ShieldCheck size={14} className="text-cyan-600" /> Documento Verificado por SoftIA Cloud
                 </p>
                 <Button
                   onClick={() => setSelectedEntry(null)}

@@ -28,11 +28,11 @@ interface LeadData {
 type Step = 'name' | 'contact' | 'request' | 'confirm' | 'done';
 
 const BOT_STEPS: Record<Step, string> = {
-  name: '¡Hola! Soy el asistente de Energy Engine 👋 Estoy aquí para ayudarte a gestionar tu consulta sobre este servicio.\n\n¿Cuál es tu nombre o el nombre de tu empresa?',
+  name: '¡Hola! Soy el asistente de SoftIA Tech 👋 Estoy aquí para ayudarte a gestionar tu consulta sobre este servicio.\n\n¿Cuál es tu nombre o el nombre de tu empresa?',
   contact: '¡Perfecto! ¿Cómo podemos contactarte? Puedes dejarnos tu correo electrónico y/o número de teléfono.',
-  request: '¡Genial! Y ahora cuéntame: ¿qué necesitas exactamente? Puedes ser todo lo detallado que quieras — nuestro equipo de inspectores leerá tu mensaje personalmente.',
+  request: '¡Genial! Y ahora cuéntame: ¿qué necesitas exactamente? Puedes ser todo lo detallado que quieras — nuestro equipo leerá tu mensaje personalmente.',
   confirm: '',
-  done: '✅ ¡Tu consulta ha sido enviada con éxito!\n\nNuestro equipo revisará tu solicitud y se pondrá en contacto contigo en la mayor brevedad posible. ¡Gracias por confiar en Energy Engine!',
+  done: '✅ ¡Tu consulta ha sido enviada con éxito!\n\nNuestro equipo revisará tu solicitud y se pondrá en contacto contigo en la mayor brevedad posible. ¡Gracias por confiar en SoftIA Tech!',
 };
 
 interface ServiceLeadChatProps {
@@ -98,7 +98,7 @@ export default function ServiceLeadChat({ serviceName, onClose }: ServiceLeadCha
       setLead(updatedLead);
       setStep('confirm');
       addBotMessage(
-        `He recogido toda tu información. Esto es lo que voy a enviar al equipo de Energy Engine:\n\n` +
+        `He recogido toda tu información. Esto es lo que voy a enviar al equipo de SoftIA Tech:\n\n` +
         `👤 **Nombre:** ${updatedLead.name}\n` +
         `📞 **Contacto:** ${updatedLead.contact}\n` +
         `💬 **Consulta:** ${trimmed}\n` +
@@ -196,7 +196,7 @@ export default function ServiceLeadChat({ serviceName, onClose }: ServiceLeadCha
           <Sparkles className="text-primary w-5 h-5" />
         </div>
         <div>
-          <p className="text-xs font-black uppercase tracking-widest text-slate-900 dark:text-white">Asistente Energy Engine</p>
+          <p className="text-xs font-black uppercase tracking-widest text-slate-900 dark:text-white">Asistente SoftIA Tech</p>
           <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Responde en segundos · Tu consulta es confidencial</p>
         </div>
         <div className="ml-auto flex items-center gap-1.5">

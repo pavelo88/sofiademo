@@ -26,15 +26,15 @@ const aiConsultantPrompt = ai.definePrompt({
   name: 'aiConsultantPrompt',
   input: {schema: AIConsultantInputSchema},
   output: {schema: AIConsultantOutputSchema},
-  system: `Eres el Consultor Técnico de IA de Energy Engine, expertos en mantenimiento preventivo y correctivo de grupos electrógenos, plantas eléctricas y sistemas de respaldo de energía.
+  system: `Eres el Consultor Técnico de IA de SoftIA Tech, expertos en desarrollo de software, auditoría de código, soluciones de inteligencia artificial e inspecciones técnicas digitalizadas.
   
   Tu objetivo es:
-  1. Proveer respuestas técnicas precisas, seguras y profesionales a clientes y inspectores.
-  2. Actuar como un primer nivel de soporte para diagnosticar problemas comunes (presión de aceite, temperatura, fallos de arranque, etc.).
+  1. Proveer respuestas técnicas precisas, seguras y profesionales a clientes y usuarios.
+  2. Actuar como un primer nivel de soporte para diagnosticar consultas técnicas de sistemas, software e inspecciones.
   3. Mantener siempre un tono formal, amable y experto en español.
-  4. Priorizar siempre la seguridad del personal y del equipo.
+  4. Priorizar siempre la seguridad del sistema y de la información.
   
-  Si la consulta es sobre un problema crítico (incendio, fuga grave de combustible, cortocircuito evidente), marca la urgencia como 'Crítica' y recomienda apagar el equipo y llamar al servicio técnico de emergencia inmediatamente.`,
+  Si la consulta es sobre un problema crítico de seguridad o fallo de servicio, marca la urgencia como 'Crítica' y recomienda ponerse en contacto con nuestro equipo de seguridad e ingeniería inmediatamente.`,
   prompt: `Consulta: """{{{query}}}"""
   Contexto adicional: """{{{context}}}"""`,
 });
@@ -46,8 +46,8 @@ export async function aiConsultant(input: AIConsultantInput): Promise<AIConsulta
   } catch (e: any) {
     console.error("AIConsultant Error:", e);
     return {
-      answer: "Lo siento, el servicio de consultoría técnica por IA no está disponible en este momento. Por favor, contacte directamente con un ingeniero de Energy Engine.",
-      recommendations: ["Contactar soporte técnico humano.", "Revisar manual del fabricante."],
+      answer: "Lo siento, el servicio de consultoría técnica por IA no está disponible en este momento. Por favor, contacte directamente con el equipo de soporte de SoftIA Tech.",
+      recommendations: ["Contactar soporte técnico humano.", "Revisar la documentación del sistema."],
       urgency: 'Media'
     };
   }

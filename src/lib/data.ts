@@ -117,10 +117,14 @@ export const brands: string[] = [
 ];
 
 export const contactInfo = {
-  address: "Dirección de la Empresa #123, Ciudad, País",
-  phone: "+00 000 000 000",
-  emails: ["contacto@nombredetuempresa.com", "soporte@nombredetuempresa.com"],
-  mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.1422937950147!2d-73.98731968459418!3d40.75889497932681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c8fe97e1%3A0x60100c938b7555a0!2sTimes%20Square!5e0!3m2!1ses!2s!4v1625000000000!5m2!1ses!2s",
+  address: "Quito, Ecuador",
+  phones: [
+    { label: "Desarrollo", name: "Pablo García", number: "+593 98 399 2549" },
+    { label: "Seguridad", name: "Sofía Acosta", number: "+593 98 016 9684" }
+  ],
+  phone: "+593 98 399 2549",
+  emails: ["contacto@softia.tech", "soporte@softia.tech"],
+  mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127677.83478950893!2d-78.55836854179688!3d-0.18065319999999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d59a4002427c9f%3A0x44b991e158ef516a!2sQuito!5e0!3m2!1ses!2sec",
 };
 
 export const socialLinks = {

@@ -116,7 +116,7 @@ export default function InspectionHub({
             </div>
             <div className="text-left text-xs">
               <p className="font-black uppercase tracking-tighter">
-                {!hasPin ? 'Configura PIN para instalar' : !canInstall ? 'Instalación no disponible' : 'Instalar energy engine'}
+                {!hasPin ? 'Configura PIN para instalar' : !canInstall ? 'Instalación no disponible' : 'Instalar SoftIA App'}
               </p>
               <p className={cn(
                 "text-[9px] font-bold uppercase tracking-widest",

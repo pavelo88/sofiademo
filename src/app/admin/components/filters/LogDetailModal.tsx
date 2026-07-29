@@ -188,7 +188,7 @@ export default function LogDetailModal({
                 <div className="w-10 h-10 bg-[#165a30] rounded-xl flex items-center justify-center text-white shadow-lg shadow-[#165a30]/20">
                   <ShieldCheck size={24} />
                 </div>
-                <span className="text-[10px] font-black tracking-[0.3em] uppercase text-[#165a30]">Energy Engine • Admin Hub</span>
+                <span className="text-[10px] font-black tracking-[0.3em] uppercase text-cyan-600">SoftIA Tech • Admin Hub</span>
               </div>
               <DialogTitle className="text-4xl font-black uppercase tracking-tighter leading-none">
                 {selectedLog.instalacion}

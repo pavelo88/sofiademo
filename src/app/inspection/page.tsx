@@ -249,7 +249,7 @@ const InspectionPageContent = () => {
 
   const handleDownloadPdf = async (job: any) => {
     const finalId = getReportDisplayId(job) || 'BORRADOR';
-    const inspectorName = job.tecnicoNombre || job.inspectorNombre || job.inspectorNombres?.join(', ') || 'Inspector Energy Engine';
+    const inspectorName = job.tecnicoNombre || job.inspectorNombre || job.inspectorNombres?.join(', ') || 'Inspector Técnico';
     const reportForPdf = await normalizeReportForPdf(job);
     const formType = normalizeInspectionFormType(job, job.formType);
     let docPdf: any = null;
@@ -286,7 +286,7 @@ const InspectionPageContent = () => {
 
       for (const report of reportsToDownload) {
         const finalId = getReportDisplayId(report) || report.id;
-        const inspectorName = report.tecnicoNombre || report.inspectorNombre || report.inspectorNombres?.join(', ') || 'Inspector Energy Engine';
+        const inspectorName = report.tecnicoNombre || report.inspectorNombre || report.inspectorNombres?.join(', ') || 'Inspector Técnico';
         const reportForPdf = await normalizeReportForPdf(report);
         const formType = normalizeInspectionFormType(report, report.formType);
         let docPdf: any = null;

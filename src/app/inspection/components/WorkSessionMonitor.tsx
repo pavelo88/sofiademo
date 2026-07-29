@@ -61,7 +61,7 @@ const WorkSessionMonitor: React.FC<WorkSessionMonitorProps> = ({ inspectorEmail 
               if (Notification.permission === "granted") {
                 // USAMOS EL REGISTRO DEL SERVICE WORKER (Es lo que hace que aparezca arriba en la barra de Android/iOS)
                 navigator.serviceWorker.ready.then((registration) => {
-                  registration.showNotification("Energy Engine", {
+                  registration.showNotification("SoftIA Tech", {
                     body: message,
                     icon: "/icon-192.png",      // Icono grande en la notificación
                     badge: "/icon-192.png",     // ICONO PEQUEÑO EN LA BARRA SUPERIOR (Bandeja)
@@ -74,7 +74,7 @@ const WorkSessionMonitor: React.FC<WorkSessionMonitorProps> = ({ inspectorEmail 
                   } as any);
                 }).catch(() => {
                   // Si el SW falla, usamos la notificación normal como respaldo
-                  new Notification("Energy Engine", { body: message, icon: "/icon-192.png" });
+                  new Notification("SoftIA Tech", { body: message, icon: "/icon-192.png" });
                 });
               } else if (Notification.permission === "default") {
                 // Solicitar permiso si aún no se ha decidido

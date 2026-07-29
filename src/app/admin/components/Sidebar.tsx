@@ -73,8 +73,8 @@ export default function Sidebar({ isOpen, onClose, onOpen, user }: SidebarProps)
               <Logo showText={false} className="w-8 h-8 object-contain pr-12" />
             </div>
             <div className={cn("transition-all duration-500 overflow-hidden", isOpen ? "w-auto opacity-100" : "w-0 opacity-0 md:hidden")}>
-              <h1 className="text-sm font-black tracking-tighter leading-none text-white whitespace-nowrap lowercase ml-2">energy engine</h1>
-              <p className="text-[10px] font-bold tracking-[0.2em] text-[#10b981] whitespace-nowrap uppercase ml-2">GRUPOS ELECTRóGENOS</p>
+              <h1 className="text-sm font-black tracking-tighter leading-none text-white whitespace-nowrap lowercase ml-2">soft<span className="text-cyan-400">IA</span></h1>
+              <p className="text-[10px] font-bold tracking-[0.2em] text-cyan-400 whitespace-nowrap uppercase ml-2">Tecnología & IA</p>
             </div>
           </Link>
           {isOpen && (

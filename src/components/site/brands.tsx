@@ -18,7 +18,7 @@ const brands: Brand[] = [
     { name: 'Doosan', logoUrl: '/logos_svg/Doosan.svg' },
     { name: 'FPT', logoUrl: '/logos_svg/FPT.png' },
     { name: 'Generac', logoUrl: '/logos_svg/Generac.svg' },
-    { name: 'Guascor Energy', logoUrl: '/logos_svg/GUASCOR.png' },
+    { name: 'Guascor', logoUrl: '/logos_svg/GUASCOR.png' },
     { name: 'Himoinsa', logoUrl: '/logos_svg/HIMOINSA.png' },
     { name: 'HiPower', logoUrl: '/logos_svg/HiPower50.png' },
     { name: 'Isuzu', logoUrl: '/logos_svg/Isuzu.svg' },

@@ -148,7 +148,7 @@ export default function ReportsPage() {
 
   const handleReprintPDF = async (report: Report) => {
     let doc: any = null;
-    const inspectorName = report.tecnicoNombre || report.inspectorNombres?.join(', ') || 'inspector energy engine';
+    const inspectorName = report.tecnicoNombre || report.inspectorNombres?.join(', ') || 'inspector técnico';
     const reportForPdf = {
       ...report,
       inspectorSignatureUrl: getInlineImageDataUrl((report as any).inspectorSignatureUrl || (report as any).inspectorSignature || ''),

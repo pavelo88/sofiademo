@@ -15,12 +15,12 @@ export default function Footer() {
         <div className="w-12 h-1 bg-primary rounded-full mb-8 opacity-50" />
 
         <div className="space-y-4">
-          <p className="text-[10px] md:text-xs font-headline font-bold uppercase tracking-[0.4em] text-slate-900 dark:text-slate-300">
-            Engineering Mastery & Energy Solutions
+          <p className="text-[10px] md:text-xs font-headline font-bold uppercase tracking-[0.4em] text-cyan-600 dark:text-cyan-400">
+            Inteligencia Artificial & Soluciones de Software
           </p>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 text-xs font-medium text-slate-600 dark:text-slate-400">
-            <p>© {new Date().getFullYear()} Energy Engine</p>
+            <p>© {new Date().getFullYear()} SoftIA Tech</p>
             <span className="hidden md:inline text-slate-300 dark:text-white/10">|</span>
             <p className="uppercase tracking-widest text-[10px]">Todos los derechos reservados</p>
           </div>

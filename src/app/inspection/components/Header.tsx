@@ -31,8 +31,8 @@ export default function Header({ isOnline, onBack, onInstall, isStandalone }: He
         )}
         <div className="flex flex-col leading-none">
           <div className="font-headline italic tracking-tighter text-xl sm:text-3xl font-black">
-            <span className="text-white">energy</span>
-            <span className="text-emerald-400 sm:text-emerald-500 ml-1">engine</span>
+            <span className="text-white">soft<span className="text-cyan-400">IA</span></span>
+            <span className="text-cyan-400 sm:text-cyan-300 ml-1">tech</span>
           </div>
           <span className="text-[8px] sm:text-[10px] font-black text-white/70 tracking-[0.1em] sm:tracking-[0.3em] uppercase mt-1">INTRANET TÉCNICA</span>
         </div>

@@ -150,40 +150,39 @@ export default function Contact() {
 
               {/* Lado Teléfonos */}
               <div className="flex flex-col gap-3">
-                {/* OFICINA CENTRAL - CAMBIADO A LLAMADA tel: */}
-                <a href="tel:+34925154354" className="flex-1 flex items-center justify-between p-3 rounded-2xl bg-white/90 dark:bg-black/40 border border-white/60 hover:border-emerald-500/50 hover:shadow-lg hover:-translate-y-1 transition-all group overflow-hidden">
+                <a href="tel:+593983992549" className="flex-1 flex items-center justify-between p-3 rounded-2xl bg-white/90 dark:bg-black/40 border border-white/60 hover:border-cyan-500/50 hover:shadow-lg hover:-translate-y-1 transition-all group overflow-hidden">
                   <div className="flex flex-col min-w-0 pr-2">
-                    <p className="text-[9px] font-black uppercase text-slate-500 dark:text-slate-400 tracking-tighter">Oficina Central</p>
-                    <p className="text-sm sm:text-base font-black text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors whitespace-nowrap">925 15 43 54</p>
+                    <p className="text-[9px] font-black uppercase text-cyan-600 dark:text-cyan-400 tracking-tighter">Desarrollo · Pablo García</p>
+                    <p className="text-sm sm:text-base font-black text-slate-900 dark:text-white group-hover:text-cyan-500 transition-colors whitespace-nowrap">+593 98 399 2549</p>
                   </div>
-                  <Phone size={16} className="text-emerald-500 shrink-0" />
+                  <Phone size={16} className="text-cyan-500 shrink-0" />
                 </a>
 
-                <a href="https://wa.me/34635120510" target="_blank" className="flex-1 flex items-center justify-between p-3 rounded-2xl bg-white/90 dark:bg-black/40 border border-white/60 hover:border-emerald-500/50 hover:shadow-lg hover:-translate-y-1 transition-all group overflow-hidden">
+                <a href="tel:+593980169684" className="flex-1 flex items-center justify-between p-3 rounded-2xl bg-white/90 dark:bg-black/40 border border-white/60 hover:border-cyan-500/50 hover:shadow-lg hover:-translate-y-1 transition-all group overflow-hidden">
                   <div className="flex flex-col min-w-0 pr-2">
-                    <p className="text-[9px] font-black uppercase text-slate-500 dark:text-slate-400 tracking-tighter">WhatsApp</p>
-                    <p className="text-sm sm:text-base font-black text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors whitespace-nowrap">635 12 05 10</p>
+                    <p className="text-[9px] font-black uppercase text-cyan-600 dark:text-cyan-400 tracking-tighter">Seguridad · Sofía Acosta</p>
+                    <p className="text-sm sm:text-base font-black text-slate-900 dark:text-white group-hover:text-cyan-500 transition-colors whitespace-nowrap">+593 98 016 9684</p>
                   </div>
-                  <MessageCircle size={16} className="text-emerald-500 shrink-0" />
+                  <Phone size={16} className="text-cyan-500 shrink-0" />
                 </a>
               </div>
             </div>
 
-            {/* MAPA - CON TU NUEVA UBICACIÓN ACTUALIZADA */}
+            {/* MAPA */}
             <div className="flex flex-col gap-3 mt-auto pt-4 border-t border-white/40 dark:border-white/10">
               <div className="w-full h-[180px] sm:h-[220px] rounded-2xl overflow-hidden relative bg-slate-200 dark:bg-muted/20 border border-white/60 dark:border-white/10 shadow-inner group">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3060.5558853974057!2d-3.6226846999999998!3d39.9065746!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd69fd9fcbbb692b%3A0x28b5ff2cac42084!2sC.%20Miguel%20L%C3%B3pez%20Bravo%2C%206%2C%2045313%20Yepes%2C%20Toledo%2C%20Espa%C3%B1a!5e0!3m2!1ses-419!2sec!4v1775714087311!5m2!1ses-419!2sec"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127677.83478950893!2d-78.55836854179688!3d-0.18065319999999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d59a4002427c9f%3A0x44b991e158ef516a!2sQuito!5e0!3m2!1ses!2sec"
                   className="w-full h-full border-0 transition-all [transition-duration:1500ms] filter grayscale-[0.8] contrast-125 sepia-[0.3] hue-rotate-[130deg] dark:invert dark:hue-rotate-180 group-hover:grayscale-0 group-hover:sepia-0 group-hover:dark:invert-0"
                   allowFullScreen
                   loading="lazy"
-                  title="Ubicación Energy Engine Yepes"
+                  title="Ubicación SoftIA Tech"
                 ></iframe>
               </div>
               <div className="flex items-center justify-center gap-3 px-3">
                 <MapPin className="text-primary shrink-0" size={18} />
                 <p className="text-[10px] sm:text-[11px] font-bold text-slate-900 dark:text-white uppercase tracking-wider">
-                  C/Miguel Lopez Bravo, 6, Yepes (Toledo) 45313
+                  Quito, Ecuador
                 </p>
               </div>
             </div>

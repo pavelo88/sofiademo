@@ -244,7 +244,7 @@ export default function ProfileTab() {
         <div className="flex-1">
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Panel de Autogestión</p>
           <h2 className="text-xl font-black text-slate-900 tracking-tight uppercase">
-            {auth.currentUser?.displayName || auth.currentUser?.email?.split('@')[0] || 'INSPECTOR ENERGY'}
+            {auth.currentUser?.displayName || auth.currentUser?.email?.split('@')[0] || 'INSPECTOR SOFTIA'}
           </h2>
         </div>
         <div className="flex flex-col items-end">

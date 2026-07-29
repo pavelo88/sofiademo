@@ -546,7 +546,7 @@ export default function JobsPage() {
   const handleReprintSavedPdf = async (job: any) => {
     const finalId = getReportDisplayId(job) || job.numero_informe || job.id;
     const individualId = job.numero_final ? (getCreationReportId(job) || null) : null;
-    const inspectorName = job.tecnicoNombre || job.inspectorNombres?.join(', ') || 'inspector energy engine';
+    const inspectorName = job.tecnicoNombre || job.inspectorNombres?.join(', ') || 'inspector técnico';
     const reportForPdf = {
       ...await normalizeReportForPdf(job),
       individualId // Para referencia en pie de página si existe numero_final
@@ -614,7 +614,7 @@ export default function JobsPage() {
       for (const report of reportsToDownload) {
         const finalId = report.numero_final || report.numero_informe || report.id;
         const individualId = report.numero_final ? report.numero_informe : null;
-        const inspectorName = report.tecnicoNombre || report.inspectorNombres?.join(', ') || 'inspector energy engine';
+        const inspectorName = report.tecnicoNombre || report.inspectorNombres?.join(', ') || 'inspector técnico';
         const reportForPdf = {
           ...await normalizeReportForPdf(report),
           individualId

@@ -254,7 +254,7 @@ export default function HistoryTab({ onStartInspection, onSelectOT }: { onStartI
 
   const handleDownloadPdf = async (job: any) => {
     const finalId = getReportDisplayId(job) || job.numero_informe || job.id;
-    const inspectorName = job.tecnicoNombre || job.inspectorNombres?.join(', ') || 'Inspector Energy Engine';
+    const inspectorName = job.tecnicoNombre || job.inspectorNombres?.join(', ') || 'Inspector Técnico';
     const reportForPdf = await normalizeReportForPdf(job);
     let docPdf: any = null;
 
@@ -282,7 +282,7 @@ export default function HistoryTab({ onStartInspection, onSelectOT }: { onStartI
 
       for (const report of reportsToDownload) {
         const finalId = getReportDisplayId(report) || report.id;
-        const inspectorName = report.tecnicoNombre || report.inspectorNombres?.join(', ') || 'Inspector Energy Engine';
+        const inspectorName = report.tecnicoNombre || report.inspectorNombres?.join(', ') || 'Inspector Técnico';
         const reportForPdf = await normalizeReportForPdf(report);
         let docPdf: any = null;
 

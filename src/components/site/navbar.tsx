@@ -148,9 +148,9 @@ export default function Navbar() {
                     ))}
                   </div>
 
-                  {/* Imagen reducida para dar espacio a los botones */}
-                  <div className="relative w-full flex-shrink-0 flex items-center justify-center my-4 h-40">
-                    <img src="/hamburguesa.png" alt="Energy Engine" className="max-h-full object-contain drop-shadow-[0_0_15px_rgba(34,211,238,0.4)]" />
+                  {/* Logo en menú móvil */}
+                  <div className="relative w-full flex-shrink-0 flex items-center justify-center my-4 py-6 rounded-2xl bg-slate-900/50 border border-cyan-500/20">
+                    <Logo />
                   </div>
 
                   <div className="mt-auto space-y-4 pt-6 pb-4">
