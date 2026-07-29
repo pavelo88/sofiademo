@@ -69,12 +69,13 @@ export default function Sidebar({ isOpen, onClose, onOpen, user }: SidebarProps)
       >
         <div className={cn("flex h-24 items-center border-b border-white/5", isOpen ? "px-6" : "justify-center px-0")}>
           <Link href="/admin" className={cn("flex items-center", isOpen ? "gap-3" : "justify-center w-full")}>
-            <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-lg shadow-black/20 shrink-0 p-2">
-              <Logo showText={false} className="w-8 h-8 object-contain pr-12" />
+            <div className="flex items-center justify-center w-12 h-12 shrink-0">
+              {/* bg-white rounded-full eliminado por petición visual */}
+              <Logo showText={false} className="w-full h-full" />
             </div>
             <div className={cn("transition-all duration-500 overflow-hidden", isOpen ? "w-auto opacity-100" : "w-0 opacity-0 md:hidden")}>
-              <h1 className="text-sm font-black tracking-tighter leading-none text-white whitespace-nowrap lowercase ml-2">soft<span className="text-cyan-400">IA</span></h1>
-              <p className="text-[10px] font-bold tracking-[0.2em] text-cyan-400 whitespace-nowrap uppercase ml-2">Tecnología & IA</p>
+              <h1 className="text-sm font-black tracking-tighter leading-none text-white whitespace-nowrap uppercase ml-2">EMPRESA <span className="text-cyan-400">DEMO</span></h1>
+              <p className="text-[10px] font-bold tracking-[0.2em] text-cyan-400 whitespace-nowrap uppercase ml-2">Tu Eslogan</p>
             </div>
           </Link>
           {isOpen && (
@@ -93,7 +94,8 @@ export default function Sidebar({ isOpen, onClose, onOpen, user }: SidebarProps)
                 href={link.href}
                 onClick={() => { onClose(); }}
                 className={cn(
-                  'relative group px-4 py-3 rounded-2xl transition-all duration-300 flex items-center gap-4',
+                  'relative group py-3 rounded-2xl transition-all duration-300 flex items-center',
+                  isOpen ? 'px-4 gap-4' : 'justify-center',
                   isActive
                     ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/20'
                     : 'text-slate-400 hover:text-white hover:bg-white/5'
@@ -110,7 +112,7 @@ export default function Sidebar({ isOpen, onClose, onOpen, user }: SidebarProps)
 
         <div className="p-4 flex flex-col gap-4 border-t border-white/5 py-8">
           {user && (
-            <div className="flex items-center gap-4 px-2">
+            <div className={cn("flex items-center", isOpen ? "gap-4 px-2" : "justify-center")}>
               <Avatar className="h-10 w-10 border-2 border-white/10 shadow-xl shrink-0">
                 <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'Avatar'} />
                 <AvatarFallback className='font-black bg-white/5 text-slate-400 text-xs text-shor'>{getInitials(user.displayName)}</AvatarFallback>
@@ -125,8 +127,8 @@ export default function Sidebar({ isOpen, onClose, onOpen, user }: SidebarProps)
           <button
             onClick={(e) => { e.stopPropagation(); if (isOpen) onClose(); else onOpen(); }}
             className={cn(
-              "flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300",
-              isOpen ? "text-slate-400 hover:text-white hover:bg-white/5" : "text-cyan-500 hover:bg-cyan-500/10"
+              "flex items-center py-3 rounded-2xl transition-all duration-300",
+              isOpen ? "px-4 gap-4 text-slate-400 hover:text-white hover:bg-white/5" : "justify-center text-cyan-500 hover:bg-cyan-500/10"
             )}
           >
             <ChevronRight size={20} className={cn("transition-transform duration-500 shrink-0", isOpen ? "rotate-180" : "rotate-0")} />
@@ -137,7 +139,10 @@ export default function Sidebar({ isOpen, onClose, onOpen, user }: SidebarProps)
 
           <button
             onClick={handleLogout}
-            className="px-4 py-3 rounded-2xl text-red-500/70 transition-all duration-300 hover:bg-red-500/10 hover:text-red-500 flex items-center gap-4 group"
+            className={cn(
+              "py-3 rounded-2xl text-red-500/70 transition-all duration-300 hover:bg-red-500/10 hover:text-red-500 flex items-center group",
+              isOpen ? "px-4 gap-4" : "justify-center"
+            )}
           >
             <LogOut className="h-5 w-5 shrink-0" />
             <span className={cn("text-xs font-black uppercase tracking-widest transition-all duration-500 whitespace-nowrap overflow-hidden", isOpen ? "w-auto opacity-100" : "w-0 opacity-0 md:hidden")}>

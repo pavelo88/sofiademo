@@ -31,12 +31,12 @@ export function ArchitectureCard({
   return (
     <Card className="overflow-hidden border-none shadow-lg bg-white/80 backdrop-blur-sm dark:bg-slate-900/80 hover:shadow-xl transition-all duration-300">
       <CardHeader className="flex flex-row items-center gap-4 pb-2">
-        <div className={`p-3 rounded-xl ${colorMap[color] || colorMap.blue}`}>
+        <div className={`p-3 rounded-xl flex-shrink-0 ${colorMap[color] || colorMap.blue}`}>
           <Icon className="w-6 h-6" />
         </div>
-        <div className="flex flex-col">
-          <CardTitle className="text-xl font-bold tracking-tight">{title}</CardTitle>
-          <div className="flex gap-1 mt-1">
+        <div className="flex flex-col min-w-0">
+          <CardTitle className="text-xl font-bold tracking-tight break-words whitespace-normal leading-tight">{title}</CardTitle>
+          <div className="flex flex-wrap gap-1 mt-1">
             {tags.map((tag) => (
               <Badge key={tag} variant="secondary" className="text-[10px] uppercase font-bold py-0 h-4">
                 {tag}

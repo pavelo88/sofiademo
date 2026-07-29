@@ -33,23 +33,16 @@ export const Logo = ({ className, showText = true }: LogoProps) => {
     );
   }
 
-  const logoSrc = '/logo.png';
-
   return (
-    <div className={cn("flex items-center gap-3 transition-all duration-500", className)}>
-      <div className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-cyan-500 via-teal-500 to-emerald-600 flex items-center justify-center shrink-0 shadow-lg shadow-cyan-500/20 border border-cyan-300/30">
-        <Cpu className="w-6 h-6 text-white animate-pulse" />
-      </div>
-      {showText && (
-        <div className="flex flex-col justify-center leading-none font-headline">
-          <span className="text-xl md:text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-            soft<span className="text-cyan-500">IA</span>
-          </span>
-          <span className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 tracking-[0.25em] uppercase mt-0.5 whitespace-nowrap">
-            Tecnología & IA
-          </span>
-        </div>
-      )}
+    <div className={cn("flex items-center justify-center transition-all duration-500 h-10 md:h-12", className)}>
+      <img
+        src={showText ? "/logo.png" : "/icon-512.png"}
+        alt="Logo Empresa"
+        className="h-full w-auto object-contain transition-opacity duration-300"
+        onError={(e) => {
+          (e.target as HTMLImageElement).src = logoBase64;
+        }}
+      />
     </div>
   );
 };
