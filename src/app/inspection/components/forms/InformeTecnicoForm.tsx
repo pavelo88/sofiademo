@@ -129,7 +129,7 @@ export const generatePDF = async (reportRaw: any, inspectorName: string, reportI
     addImageSafely(doc, report.inspectorSignatureUrl, leftMargin, currentY + 6, 50, 18);
     doc.line(leftMargin, currentY + 25, leftMargin + 50, currentY + 25);
     doc.text(report.tecnicos || inspectorName || '', leftMargin, currentY + 32);
-    doc.text("Inspector EnergyEngine", leftMargin, currentY + 38);
+    doc.text("Inspector Técnico", leftMargin, currentY + 38);
 
     // --- REGISTRO FOTOGRÁFICO ---
     if (report.imageUrls && report.imageUrls.length > 0) {

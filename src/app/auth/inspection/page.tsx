@@ -356,7 +356,7 @@ export default function InspectionLoginPage() {
               </div>
               <Input 
                 type="email" 
-                placeholder="inspector@energyengine.es" 
+                placeholder="inspector@nombredetuempresa.com" 
                 required 
                 value={email} 
                 disabled={!isOnline && hasSavedUser}

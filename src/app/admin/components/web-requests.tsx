@@ -58,7 +58,7 @@ export default function WebRequests() {
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Solicitudes Web");
-    XLSX.writeFile(workbook, `EnergyEngine_Solicitudes_${format(new Date(), 'yyyyMMdd')}.xlsx`);
+    XLSX.writeFile(workbook, `Solicitudes_Demo_${format(new Date(), 'yyyyMMdd')}.xlsx`);
   }, [requests]);
 
   const headerAction = useMemo(() => (

@@ -32,7 +32,7 @@ export default function TechnicalDocsPage() {
           </h1>
           <p className="text-slate-400 max-w-2xl text-lg leading-relaxed font-medium">
             Desglose técnico de la infraestructura, patrones de diseño y lógica de sincronización offline 
-            diseñada para la resiliencia industrial de EnergyEngine.
+            diseñada para la gestión operativa e inspección técnica de Nombre de tu Empresa.
           </p>
         </div>
       </div>

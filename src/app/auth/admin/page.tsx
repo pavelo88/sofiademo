@@ -286,7 +286,7 @@ export default function AdminLoginPage() {
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
               <Label className="text-slate-800 font-black uppercase text-[10px] tracking-widest px-1">Email</Label>
-              <Input type="email" placeholder="admin@energyengine.es" required value={email} onChange={(e) => setEmail(e.target.value)} className="bg-slate-100/50 border-slate-200 text-slate-900 rounded-xl h-12 focus-visible:ring-slate-300 font-medium shadow-sm" />
+              <Input type="email" placeholder="admin@nombredetuempresa.com" required value={email} onChange={(e) => setEmail(e.target.value)} className="bg-slate-100/50 border-slate-200 text-slate-900 rounded-xl h-12 focus-visible:ring-slate-300 font-medium shadow-sm" />
             </div>
             <div className="space-y-2">
               <Label className="text-slate-800 font-black uppercase text-[10px] tracking-widest px-1">Contraseña o DNI 1</Label>

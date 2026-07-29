@@ -117,16 +117,16 @@ export const brands: string[] = [
 ];
 
 export const contactInfo = {
-  address: "C/Miguel Lopez Bravo, 6 (Nave), Yepes (Toledo) CP:45313",
-  phone: "92 515 43 53",
-  emails: ["administracion@energyengine.es", "serviciotecnico@energyengine.es"],
-  mapUrl: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3060.5601159996186!2d-3.6247125!3d39.9064799!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd69fd9fca56779b%3A0xd8e264de001cf92b!2sEnergy%20Engine%20Grupos%20Electr%C3%B3genos%20S.L!5e0!3m2!1ses-419!2sec!4v1771523891979!5m2!1ses-419!2sec",
+  address: "Dirección de la Empresa #123, Ciudad, País",
+  phone: "+00 000 000 000",
+  emails: ["contacto@nombredetuempresa.com", "soporte@nombredetuempresa.com"],
+  mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.1422937950147!2d-73.98731968459418!3d40.75889497932681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c8fe97e1%3A0x60100c938b7555a0!2sTimes%20Square!5e0!3m2!1ses!2s!4v1625000000000!5m2!1ses!2s",
 };
 
 export const socialLinks = {
   facebook: "#",
   instagram: "#",
-  linkedin: "https://www.linkedin.com/company/energy-engine-grupos-electrogenos/"
+  linkedin: "#"
 };
 
 export const navLinks = [

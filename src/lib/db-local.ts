@@ -130,7 +130,7 @@ export class LocalDB extends Dexie {
   filtros_cache!: Table<FiltroCache>;
 
   constructor() {
-    super('EnergyEngineDB');
+    super('DemoDB');
 
     this.version(7).stores({
       hojas_trabajo: '++id, firebaseId, synced, createdAt',

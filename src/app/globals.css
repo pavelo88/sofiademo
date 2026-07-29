@@ -11,31 +11,31 @@
     --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-    --primary: 143 61% 22%;
+    --primary: 189 94% 43%;
     --primary-foreground: 0 0% 100%;
     --secondary: 222 47% 11%;
     --secondary-foreground: 0 0% 100%;
     --muted: 210 40% 96%;
     --muted-foreground: 215 16% 47%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 189 94% 95%;
+    --accent-foreground: 189 94% 20%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 143 61% 22%;
+    --ring: 189 94% 43%;
     --radius: 0.75rem;
   }
 
   .dark {
-    /* MODO OSCURO */
-    --background: 215 10% 18%;
+    /* MODO OSCURO SOFTIA */
+    --background: 215 28% 7%;
     --foreground: 210 40% 98%;
-    --card: 215 10% 22%;
+    --card: 215 25% 11%;
     --card-foreground: 210 40% 98%;
-    --popover: 215 10% 22%;
+    --popover: 215 25% 11%;
     --popover-foreground: 210 40% 98%;
-    --primary: 143 61% 22%;
+    --primary: 189 94% 43%;
     --primary-foreground: 0 0% 100%;
     --secondary: 217 33% 17%;
     --secondary-foreground: 210 40% 98%;
@@ -47,7 +47,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217 33% 17%;
     --input: 217 33% 17%;
-    --ring: 143 61% 22%;
+    --ring: 189 94% 43%;
   }
 }
 
@@ -68,17 +68,15 @@
   /* ────────── CONFIGURACIÓN DEL CALENDARIO ────────── */
 
   input[type="date"] {
-    /* Esto pinta el círculo del día seleccionado y el "Hoy" de tu verde bosque */
-    accent-color: #144229;
+    accent-color: #06b6d4;
     cursor: pointer;
   }
 
-  /* Esto cambia el color del ícono del calendario a tu verde bosque */
+  /* Esto cambia el color del ícono del calendario a Cyan */
   input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
     opacity: 1;
-    /* Este filtro convierte el ícono negro original a tu verde bosque esmeralda */
-    filter: invert(19%) sepia(16%) saturate(2253%) hue-rotate(103deg) brightness(91%) contrast(92%);
+    filter: invert(53%) sepia(85%) saturate(1637%) hue-rotate(152deg) brightness(97%) contrast(97%);
   }
 }
 

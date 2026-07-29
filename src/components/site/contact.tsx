@@ -118,17 +118,17 @@ export default function Contact() {
 
               {/* Lado Correos y Redes */}
               <div className="flex flex-col gap-3">
-                <a href="mailto:administracion@energyengine.es" className="flex-1 flex items-center gap-3 p-3 rounded-2xl bg-white/90 dark:bg-black/40 border border-white/60 hover:border-emerald-500 hover:shadow-lg hover:-translate-y-1 transition-all group overflow-hidden">
-                  <Mail size={16} className="text-emerald-500 shrink-0" />
+                <a href="mailto:contacto@nombredetuempresa.com" className="flex-1 flex items-center gap-3 p-3 rounded-2xl bg-white/90 dark:bg-black/40 border border-white/60 hover:border-cyan-500 hover:shadow-lg hover:-translate-y-1 transition-all group overflow-hidden">
+                  <Mail size={16} className="text-cyan-500 shrink-0" />
                   <p className="text-[10px] sm:text-[11.5px] font-bold text-slate-700 dark:text-slate-200 whitespace-nowrap">
-                    administracion@energyengine.es
+                    contacto@nombredetuempresa.com
                   </p>
                 </a>
 
-                <a href="mailto:serviciotecnico@energyengine.es" className="flex-1 flex items-center gap-3 p-3 rounded-2xl bg-white/90 dark:bg-black/40 border border-white/60 hover:border-emerald-500 hover:shadow-lg hover:-translate-y-1 transition-all group overflow-hidden">
-                  <Mail size={16} className="text-emerald-500 shrink-0" />
+                <a href="mailto:soporte@nombredetuempresa.com" className="flex-1 flex items-center gap-3 p-3 rounded-2xl bg-white/90 dark:bg-black/40 border border-white/60 hover:border-cyan-500 hover:shadow-lg hover:-translate-y-1 transition-all group overflow-hidden">
+                  <Mail size={16} className="text-cyan-500 shrink-0" />
                   <p className="text-[10px] sm:text-[11.5px] font-bold text-slate-700 dark:text-slate-200 whitespace-nowrap">
-                    serviciotecnico@energyengine.es
+                    soporte@nombredetuempresa.com
                   </p>
                 </a>
 

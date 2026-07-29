@@ -6,10 +6,10 @@ export default function SEOStructuredData() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": "Energy Engine España",
-    "image": "https://energyengine.es/hero.png",
-    "@id": "https://energyengine.es",
-    "url": "https://energyengine.es",
+    "name": "Nombre de tu Empresa",
+    "image": "https://sof-ia-tech.vercel.app/hero.png",
+    "@id": "https://sof-ia-tech.vercel.app",
+    "url": "https://sof-ia-tech.vercel.app",
     "telephone": contactInfo.phone,
     "address": {
       "@type": "PostalAddress",

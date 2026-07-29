@@ -14,25 +14,19 @@ const fontBody = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://energyengine.es'),
-  title: 'Energy Engine  |  Motores & Grupos ElectrógenosE',
-  applicationName: 'Energy Engine',
-  description: 'Expertos en Motores Energy, mantenimiento integral, reparación de averías y pruebas de carga para grupos electrógenos. Servicio técnico oficial multimarca: Perkins, Guascor, Cummins, Volvo Penta y más. Asistencia 24/7.',
+  metadataBase: new URL('https://sof-ia-tech.vercel.app'),
+  title: 'Nombre de tu Empresa  |  Sistema de Gestión & Inspecciones',
+  applicationName: 'Nombre de tu Empresa',
+  description: 'Plataforma integral para gestión de ordenes de trabajo, informes de inspección técnica y control operativo.',
   keywords: [
-    'motores energy', 'mantenimiento motores energy', 'grupos electrógenos',
-    'Perkins', 'Guascor', 'Siemens Energy', 'Guascor Energy', 'Cummins', 'Iveco', 'Ruggerini', 'Volvo Penta',
-    'Lombardini', 'MAN', 'Rolls-Royce', 'MTU', 'Deif', 'Baudouin', 'Atlas Copco', 'Caterpillar',
-    'Leroy-Somer', 'Pramac', 'Deutz', 'Doosan', 'J.L. Metric', 'Generac', 'Stamford', 'Isuzu',
-    'Hipower', 'Himoinsa', 'John Deere', 'Kohler', 'Kubota', 'FPT', 'Scania', 'Socomec',
-    'Mosa', 'Yanmar', 'Mecc Alte', 'mantenimiento industrial', 'reparación de averías',
-    'bancos de carga', 'cogeneración', 'asistencia técnica 24/7', 'repuestos originales',
-    'España', 'Portugal'
+    'inspecciones técnicas', 'órdenes de trabajo', 'mantenimiento industrial',
+    'gestión de servicios', 'asistencia técnica', 'informes de campo'
   ],
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Energy Engine',
+    title: 'Nombre de tu Empresa',
   },
   icons: {
     apple: '/icon-192.png',
@@ -40,23 +34,23 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'es_ES',
-    url: 'https://energyengine.es',
-    title: 'Energy Engine | Especialistas en Energía y Mantenimiento',
-    description: 'Servicios especializados de mantenimiento, repuestos y asistencia 24/7 para grupos electrógenos y plantas de cogeneración.',
-    siteName: 'Energy Engine',
+    url: 'https://sof-ia-tech.vercel.app',
+    title: 'Nombre de tu Empresa | Gestión Operativa e Inspecciones',
+    description: 'Soluciones integrales para digitalizar inspecciones técnicas, órdenes de trabajo y reporte de servicios.',
+    siteName: 'Nombre de tu Empresa',
     images: [
       {
         url: '/hero.png',
         width: 1200,
         height: 630,
-        alt: 'Energy Engine - Mantenimiento Industrial',
+        alt: 'Nombre de tu Empresa - Sistema Demo',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Energy Engine | Mantenimiento de Grupos Electrógenos',
-    description: 'Soluciones integrales de energía, mantenimiento multimarca y soporte técnico 24/7.',
+    title: 'Nombre de tu Empresa | Plataforma de Inspección',
+    description: 'Soluciones integrales para digitalizar inspecciones técnicas y soporte de campo.',
     images: ['/hero.png'],
   },
 };
