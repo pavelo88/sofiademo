@@ -941,6 +941,8 @@ export default function InformeTecnicoForm({ initialData, aiData, onSuccess, isA
             placeholder="Describa los antecedentes, la intervención y la situación actual..."
             spellCheck="true"
             lang="es"
+            autoCorrect="on"
+            autoCapitalize="sentences"
           />
       </section>
 

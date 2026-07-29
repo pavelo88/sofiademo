@@ -1117,6 +1117,7 @@ export default function HojaTrabajoForm({
               <StableInput label="N' Motor" icon={Hash} value={formData.n_motor} onChange={(v: any) => handleInputChange('n_motor', v)} />
               <StableInput label="Grupo Electrógeno" icon={Settings} value={formData.grupo} onChange={(v: any) => handleInputChange('grupo', v)} />
               <StableInput label="N' Grupo" icon={Hash} value={formData.n_grupo} onChange={(v: any) => handleInputChange('n_grupo', v)} />
+              <StableInput label="Potencia (KVA)" icon={Zap} value={formData.potencia} onChange={(v: any) => handleInputChange('potencia', v)} />
               <StableInput label="N' de Pedido / OC" icon={Hash} value={formData.n_pedido} onChange={(v: any) => handleInputChange('n_pedido', v)} />
             </div>
             <div className="lg:col-span-2 space-y-2">
@@ -1226,6 +1227,8 @@ export default function HojaTrabajoForm({
             placeholder="Describa aquí detalladamente las intervenciones realizadas..."
             spellCheck="true"
             lang="es"
+            autoCorrect="on"
+            autoCapitalize="sentences"
           />
 
         </section>

@@ -1227,7 +1227,7 @@ export default function InformeRevisionForm({
             value={formData.observaciones}
             onChange={(next) => handleInputChange('observaciones', next)}
           />
-          <textarea className="w-full min-h-[220px] bg-slate-50 border border-slate-200 rounded-xl p-4 resize-y outline-none focus:border-primary focus:bg-white transition-all shadow-inner text-sm font-medium text-black leading-relaxed whitespace-pre-wrap" placeholder="Escriba aquí cualquier anomalía o trabajo adicional recomendado..." value={formData.observaciones} onChange={(e: any) => handleInputChange('observaciones', e.target.value)} spellCheck="true" lang="es" />
+          <textarea className="w-full min-h-[220px] bg-slate-50 border border-slate-200 rounded-xl p-4 resize-y outline-none focus:border-primary focus:bg-white transition-all shadow-inner text-sm font-medium text-black leading-relaxed whitespace-pre-wrap" placeholder="Escriba aquí cualquier anomalía o trabajo adicional recomendado..." value={formData.observaciones} onChange={(e: any) => handleInputChange('observaciones', e.target.value)} spellCheck="true" lang="es" autoCorrect="on" autoCapitalize="sentences" />
           <div className="grid md:grid-cols-2 gap-6 items-start pt-4">
             <div className="text-left">
               <SignaturePad title="Firma del Inspector Técnico" signature={inspectorSignature} onSignatureEnd={setInspectorSignature} showSavedSignature={true} />

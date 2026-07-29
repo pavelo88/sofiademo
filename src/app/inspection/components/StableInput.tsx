@@ -38,6 +38,9 @@ const StableInput = React.memo(({
         min={min}
         step={step}
         className={`w-full bg-white border border-slate-200 rounded-xl p-2.5 ${Icon ? 'pl-10' : ''} outline-none focus:border-primary focus:bg-white transition-all font-bold !text-black shadow-sm text-xs`}
+        autoCorrect="on"
+        autoCapitalize="sentences"
+        spellCheck="true"
       />
     </div>
   </div>
