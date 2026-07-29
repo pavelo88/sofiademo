@@ -26,8 +26,8 @@ export default function Sidebar({ activeTab, onNavigate }: SidebarProps) {
   const handleLogout = async () => {
     if (confirm("¿Cerrar sesión ahora?")) {
       try {
-        localStorage.removeItem('energy_engine_session_id');
-        localStorage.removeItem('energy_engine_offline_email');
+        localStorage.removeItem('softia_session_id');
+        localStorage.removeItem('softia_offline_email');
         if (auth) {
           await signOut(auth);
         }
@@ -56,7 +56,7 @@ export default function Sidebar({ activeTab, onNavigate }: SidebarProps) {
           <button 
             key={item.id} 
             onClick={() => onNavigate(item.id)} 
-            className={`w-full flex items-center gap-4 p-4 rounded-2xl font-bold transition-all duration-300 ease-in-out ${activeTab === item.id ? 'bg-[#165a30]/10 text-[#165a30] shadow-md' : 'text-slate-500 hover:bg-white/70 hover:text-slate-800'}`}>
+            className={`w-full flex items-center gap-4 p-4 rounded-2xl font-bold transition-all duration-300 ease-in-out ${activeTab === item.id ? 'bg-cyan-600/10 text-cyan-600 shadow-md' : 'text-slate-500 hover:bg-white/70 hover:text-slate-800'}`}>
             <item.icon size={22} className={activeTab === item.id ? item.color : ''} /> {item.label}
           </button>
         ))}

@@ -62,9 +62,9 @@ export default function Sidebar({ isOpen, onClose, onOpen, user }: SidebarProps)
       <div
         onClick={() => { if (!isOpen) onOpen(); }}
         className={cn(
-          'fixed inset-y-0 left-0 z-50 flex h-full transform flex-col bg-[#062113] backdrop-blur-xl border-r border-white/5 text-slate-100 shadow-2xl transition-all duration-500 ease-in-out md:relative group/sidebar',
+          'fixed inset-y-0 left-0 z-50 flex h-full transform flex-col bg-slate-950 backdrop-blur-xl border-r border-white/5 text-slate-100 shadow-2xl transition-all duration-500 ease-in-out md:relative group/sidebar',
           isOpen ? 'translate-x-0 w-[85%] md:w-64' : '-translate-x-full md:translate-x-0 md:w-20',
-          !isOpen && 'cursor-pointer hover:bg-[#082a18]'
+          !isOpen && 'cursor-pointer hover:bg-slate-900'
         )}
       >
         <div className={cn("flex h-24 items-center border-b border-white/5", isOpen ? "px-6" : "justify-center px-0")}>
@@ -95,7 +95,7 @@ export default function Sidebar({ isOpen, onClose, onOpen, user }: SidebarProps)
                 className={cn(
                   'relative group px-4 py-3 rounded-2xl transition-all duration-300 flex items-center gap-4',
                   isActive
-                    ? 'bg-[#10b981] text-white shadow-lg shadow-[#10b981]/20'
+                    ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/20'
                     : 'text-slate-400 hover:text-white hover:bg-white/5'
                 )}
               >
@@ -126,7 +126,7 @@ export default function Sidebar({ isOpen, onClose, onOpen, user }: SidebarProps)
             onClick={(e) => { e.stopPropagation(); if (isOpen) onClose(); else onOpen(); }}
             className={cn(
               "flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300",
-              isOpen ? "text-slate-400 hover:text-white hover:bg-white/5" : "text-[#10b981] hover:bg-[#10b981]/10"
+              isOpen ? "text-slate-400 hover:text-white hover:bg-white/5" : "text-cyan-500 hover:bg-cyan-500/10"
             )}
           >
             <ChevronRight size={20} className={cn("transition-transform duration-500 shrink-0", isOpen ? "rotate-180" : "rotate-0")} />

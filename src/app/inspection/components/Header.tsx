@@ -18,7 +18,7 @@ export default function Header({ isOnline, onBack, onInstall, isStandalone }: He
   const showBackButton = true;
 
   return (
-    <header className="fixed top-0 left-0 w-full px-4 sm:px-6 bg-[#0a2e1f] flex justify-between items-center z-50 h-16 sm:h-20 border-b border-white/10 shadow-2xl">
+    <header className="fixed top-0 left-0 w-full px-4 sm:px-6 bg-slate-950 flex justify-between items-center z-50 h-16 sm:h-20 border-b border-white/10 shadow-2xl">
       <div className="flex items-center gap-2 sm:gap-4">
         {showBackButton && (
           <button 

@@ -29,6 +29,7 @@ export const metadata: Metadata = {
     title: 'Nombre de tu Empresa',
   },
   icons: {
+    icon: '/icon.svg',
     apple: '/icon-192.png',
   },
   openGraph: {

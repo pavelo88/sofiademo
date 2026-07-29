@@ -15,13 +15,13 @@ export default function Header({ onMenuClick }: HeaderProps) {
       <div className="flex items-center gap-4 sm:gap-6 min-w-0">
         <button 
           onClick={onMenuClick} 
-          className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-400 hover:text-[#062113] hover:bg-white transition-all shadow-sm shrink-0"
+          className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-400 hover:text-cyan-600 hover:bg-white transition-all shadow-sm shrink-0"
         >
           <Menu className="h-6 w-6" />
         </button>
         <div className="space-y-1 min-w-0">
             <h1 className="text-2xl font-black text-[#0f172a] tracking-widest uppercase italic font-headline truncate">{title}</h1>
-            <div className="h-1 w-12 bg-[#10b981] rounded-full"></div>
+            <div className="h-1 w-12 bg-cyan-500 rounded-full"></div>
         </div>
       </div>
       

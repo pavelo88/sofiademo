@@ -97,7 +97,7 @@ export default function Contact() {
 
         <div className="text-center px-2">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-headline font-black text-slate-900 dark:text-white tracking-tighter leading-[1.1] uppercase">
-            ¿Necesitas <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-500">asistencia técnica?</span>
+            ¿Necesitas <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-teal-400">asistencia técnica?</span>
           </h2>
         </div>
 
@@ -118,31 +118,28 @@ export default function Contact() {
 
               {/* Lado Correos y Redes */}
               <div className="flex flex-col gap-3">
-                <a href="mailto:contacto@nombredetuempresa.com" className="flex-1 flex items-center gap-3 p-3 rounded-2xl bg-white/90 dark:bg-black/40 border border-white/60 hover:border-cyan-500 hover:shadow-lg hover:-translate-y-1 transition-all group overflow-hidden">
+                <a href="mailto:contacto@softia.tech" className="flex-1 flex items-center gap-3 p-3 rounded-2xl bg-white/90 dark:bg-black/40 border border-white/60 hover:border-cyan-500 hover:shadow-lg hover:-translate-y-1 transition-all group overflow-hidden">
                   <Mail size={16} className="text-cyan-500 shrink-0" />
                   <p className="text-[10px] sm:text-[11.5px] font-bold text-slate-700 dark:text-slate-200 whitespace-nowrap">
-                    contacto@nombredetuempresa.com
+                    contacto@softia.tech
                   </p>
                 </a>
 
-                <a href="mailto:soporte@nombredetuempresa.com" className="flex-1 flex items-center gap-3 p-3 rounded-2xl bg-white/90 dark:bg-black/40 border border-white/60 hover:border-cyan-500 hover:shadow-lg hover:-translate-y-1 transition-all group overflow-hidden">
+                <a href="mailto:soporte@softia.tech" className="flex-1 flex items-center gap-3 p-3 rounded-2xl bg-white/90 dark:bg-black/40 border border-white/60 hover:border-cyan-500 hover:shadow-lg hover:-translate-y-1 transition-all group overflow-hidden">
                   <Mail size={16} className="text-cyan-500 shrink-0" />
                   <p className="text-[10px] sm:text-[11.5px] font-bold text-slate-700 dark:text-slate-200 whitespace-nowrap">
-                    soporte@nombredetuempresa.com
+                    soporte@softia.tech
                   </p>
                 </a>
 
                 <div className="flex-1 flex items-center justify-center gap-6 p-3 rounded-2xl bg-white/90 dark:bg-black/40 border border-white/60 shadow-inner">
-
-                  <Link href="https://heyzine.com/flip-book/9c1719c192.html" target="_blank" title="Ver Catálogo" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-all duration-300 hover:scale-110">
+                  <Link href="#" title="Ver Catálogo" className="text-slate-600 dark:text-slate-400 hover:text-cyan-500 transition-all duration-300 hover:scale-110">
                     <BookOpen size={20} />
                   </Link>
-                  <Link href="/presentacion.mp4" target="_blank" title="Ver Video Presentación" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-all duration-300 hover:scale-110">
+                  <Link href="#" title="Ver Video Presentación" className="text-slate-600 dark:text-slate-400 hover:text-cyan-500 transition-all duration-300 hover:scale-110">
                     <PlayCircle size={20} />
                   </Link>
-
-
-                  <Link href="https://www.linkedin.com/in/energy-engine-grupos-electrogenos-74529270" target="_blank" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-all duration-300 hover:scale-110">
+                  <Link href="#" title="LinkedIn" className="text-slate-600 dark:text-slate-400 hover:text-cyan-500 transition-all duration-300 hover:scale-110">
                     <Linkedin size={20} />
                   </Link>
                 </div>
@@ -292,11 +289,11 @@ export default function Contact() {
                       <FormLabel className="text-[10px] font-black uppercase text-slate-800 dark:text-slate-300 tracking-widest">Detalle su requerimiento</FormLabel>
                       <FormControl className="flex-grow">
                         <Textarea
-                          placeholder="Ej. Mantenimiento preventivo para motor diésel..."
+                          placeholder="Ej. Solicitud de desarrollo de software, automatización o solución de IA..."
                           maxLength={300}
                           rows={3}
                           {...field}
-                          className="flex-grow min-h-[72px] sm:min-h-[84px] rounded-2xl bg-white/80 dark:bg-black/40 border-white/60 dark:border-white/10 focus-visible:ring-primary/50 resize-none p-4 text-slate-900 dark:text-white leading-relaxed shadow-sm"
+                          className="flex-grow min-h-[72px] sm:min-h-[84px] rounded-2xl bg-white/80 dark:bg-black/40 border-white/60 dark:border-white/10 focus-visible:ring-cyan-500/50 resize-none p-4 text-slate-900 dark:text-white leading-relaxed shadow-sm"
                         />
                       </FormControl>
                       <p className="text-[10px] text-slate-500 dark:text-slate-400 text-right">
@@ -307,7 +304,7 @@ export default function Contact() {
                   )}
                 />
 
-                <Button type="submit" disabled={isSubmitting} className="w-full h-14 sm:h-16 text-sm sm:text-base font-black uppercase tracking-widest rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all bg-[#0f5b3a] hover:bg-[#0c4a2e] text-white border-none mt-2">
+                <Button type="submit" disabled={isSubmitting} className="w-full h-14 sm:h-16 text-sm sm:text-base font-black uppercase tracking-widest rounded-2xl shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 hover:-translate-y-1 transition-all bg-cyan-500 hover:bg-cyan-600 text-white border-none mt-2">
                   {isSubmitting ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
                   {isSubmitting ? 'Procesando...' : 'Enviar Solicitud'}
                 </Button>

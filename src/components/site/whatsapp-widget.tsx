@@ -8,16 +8,16 @@ import {
 } from '@/components/ui/popover';
 import { MessageCircle, Phone, User } from 'lucide-react';
 
-const Delegations = [
+const contacts = [
   {
-    title: 'Delegación Norte',
-    name: 'Álvaro Madroñal',
-    phone: '34683775208',
+    title: 'Desarrollo',
+    name: 'Pablo García',
+    phone: '593983992549',
   },
   {
-    title: 'Delegación Sur',
-    name: 'José María López',
-    phone: '34635120510',
+    title: 'Seguridad',
+    name: 'Sofía Acosta',
+    phone: '593980169684',
   },
 ];
 
@@ -25,43 +25,41 @@ export default function WhatsAppWidget() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        {/* BOTÓN PRINCIPAL: Ahora usa 'bg-primary' para el verde oficial */}
         <Button
           size="icon"
-          className="fixed bottom-6 right-6 h-14 w-14 rounded-full bg-primary hover:bg-primary/90 shadow-lg z-[100] transition-transform hover:scale-110"
+          className="fixed bottom-6 right-6 h-14 w-14 rounded-full bg-cyan-500 hover:bg-cyan-600 shadow-lg shadow-cyan-500/30 z-[100] transition-transform hover:scale-110"
         >
           <MessageCircle className="h-8 w-8 text-white" />
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent align="end" className="w-80 p-4 mb-4 mr-2">
+      <PopoverContent align="end" className="w-80 p-4 mb-4 mr-2 rounded-2xl border-cyan-500/20 shadow-2xl">
         <div className="grid gap-4">
-          <div className="space-y-2">
-            <h4 className="font-medium leading-none">Contactar Delegación</h4>
-            <p className="text-sm text-muted-foreground">
-              Seleccione para iniciar una conversación.
+          <div className="space-y-1">
+            <h4 className="font-bold leading-none text-slate-900 dark:text-white uppercase text-sm">Contactar por WhatsApp</h4>
+            <p className="text-xs text-muted-foreground">
+              Seleccione un canal para iniciar chat directo.
             </p>
           </div>
           <div className="grid gap-2">
-            {Delegations.map((delegation) => {
-              const whatsappUrl = `https://wa.me/${delegation.phone}?text=Hola%20${encodeURIComponent(delegation.name)}`;
+            {contacts.map((c) => {
+              const whatsappUrl = `https://wa.me/${c.phone}?text=Hola%20${encodeURIComponent(c.name)}`;
               return (
                 <a
-                  key={delegation.name}
+                  key={c.name}
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center justify-between rounded-md border p-3 transition-colors hover:bg-accent"
+                  className="group flex items-center justify-between rounded-xl border p-3 transition-colors hover:bg-cyan-500/10 hover:border-cyan-500/50"
                 >
                   <div>
-                    <p className="font-semibold">{delegation.title}</p>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <User className="h-3 w-3" />
-                      <span>{delegation.name}</span>
+                    <p className="font-bold text-xs uppercase text-cyan-600 dark:text-cyan-400">{c.title}</p>
+                    <div className="flex items-center gap-1.5 text-xs text-slate-700 dark:text-slate-200">
+                      <User className="h-3 w-3 text-cyan-500" />
+                      <span className="font-medium">{c.name}</span>
                     </div>
                   </div>
-                  {/* ICONO DE TELÉFONO: Ahora cambia al verde 'text-primary' al pasar el mouse */}
-                  <Phone className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-primary" />
+                  <Phone className="h-4 w-4 text-cyan-500 transition-colors group-hover:scale-110" />
                 </a>
               );
             })}
