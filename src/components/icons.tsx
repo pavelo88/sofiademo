@@ -34,15 +34,27 @@ export const Logo = ({ className, showText = true }: LogoProps) => {
   }
 
   return (
-    <div className={cn("flex items-center justify-center transition-all duration-500 h-10 md:h-12", className)}>
-      <img
-        src={showText ? "/logo.png" : "/icon-512.png"}
-        alt="Logo Empresa"
-        className="h-full w-auto object-contain transition-opacity duration-300"
-        onError={(e) => {
-          (e.target as HTMLImageElement).src = logoBase64;
-        }}
-      />
+    <div className={cn("flex items-center gap-2 md:gap-3 transition-all duration-500", className)}>
+      <div className="relative w-10 h-10 md:w-12 md:h-12 flex items-center justify-center shrink-0">
+        <img
+          src="/icon-512.png"
+          alt="Icono Empresa"
+          className="w-full h-full object-contain transition-opacity duration-300"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = logoBase64;
+          }}
+        />
+      </div>
+      {showText && (
+        <div className="flex flex-col justify-center leading-none font-headline mt-1">
+          <span className="text-lg md:text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+            Tu <span className="text-cyan-500">Empresa</span>
+          </span>
+          <span className="text-[9px] md:text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-[0.2em] uppercase mt-0.5 whitespace-nowrap">
+            Tu Eslogan Corporativo
+          </span>
+        </div>
+      )}
     </div>
   );
 };
