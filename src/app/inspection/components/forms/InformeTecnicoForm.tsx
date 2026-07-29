@@ -646,6 +646,14 @@ export default function InformeTecnicoForm({ initialData, aiData, onSuccess, isA
           originalJobId: initialData?.originalJobId || initialData?.orderId || initialData?.id || null,
           procedencia: (initialData?.numero_ot || initialData?.id?.startsWith('OT-')) ? 'OT' : 'INDEPENDIENTE',
           numero_informe: firebaseId,
+          id: firebaseId,
+          tecnicos: inspectorName,
+          inspectorId: currentEmail || '',
+          inspectorNombre: inspectorName,
+          inspectorInitials,
+          inspectorIds: currentEmail ? [currentEmail] : [],
+          inspectorNombres: [inspectorName],
+          fecha_creacion: new Date().toISOString(),
         };
         if (synced) {
           localData.imageUrls = syncedImageUrls || [];

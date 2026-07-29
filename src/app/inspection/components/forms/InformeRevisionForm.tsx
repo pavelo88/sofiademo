@@ -828,6 +828,14 @@ export default function InformeRevisionForm({
           imageUrls: customImageUrls || formData.imageUrls || [],
           inspectorSignatureUrl: customInspectorSigUrl || inspectorSignature || null,
           clientSignatureUrl: customClientSigUrl || clientSignature || null,
+          id: firebaseId,
+          tecnicos: inspectorName,
+          inspectorId: currentEmail || '',
+          inspectorNombre: inspectorName,
+          inspectorInitials,
+          inspectorIds: currentEmail ? [currentEmail] : [],
+          inspectorNombres: [inspectorName],
+          fecha_creacion: new Date().toISOString(),
         };
 
         if (!synced) {
