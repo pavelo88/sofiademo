@@ -151,6 +151,6 @@ export default function ServiceLeadChat({ serviceName, onClose }: ServiceLeadCha
           </Button>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
