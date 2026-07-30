@@ -23,7 +23,7 @@ const itemVariants = {
   visible: { 
     opacity: 1, 
     y: 0,
-    transition: { type: "spring", stiffness: 50, damping: 20 }
+    transition: { type: "spring" as any, stiffness: 50, damping: 20 }
   },
 };
 
@@ -62,18 +62,18 @@ export default function Hero() {
 
           {/* LADO IZQUIERDO: TEXTOS */}
           <div className="flex flex-col items-start text-left font-body">
-            <motion.h1 variants={itemVariants} className="text-[2.5rem] sm:text-4xl md:text-5xl lg:text-[4.5rem] font-headline font-black mb-4 sm:mb-6 tracking-tighter leading-[1.05] text-slate-900 dark:text-white drop-shadow-sm">
+            <motion.h1 variants={itemVariants} className="text-[2.5rem] sm:text-4xl md:text-5xl lg:text-[4.5rem] font-headline font-black mb-4 sm:mb-6 tracking-tighter leading-[1.05] text-black dark:text-white drop-shadow-sm">
               <span className="block opacity-90">Nombre de</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary block mt-1 drop-shadow-lg">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-800 via-blue-900 to-indigo-950 lg:from-cyan-600 lg:via-blue-600 lg:to-cyan-500 dark:from-cyan-400 dark:via-blue-400 dark:to-cyan-300 block mt-1 drop-shadow-sm">
                 Tu Empresa
               </span>
             </motion.h1>
 
-            <motion.h2 variants={itemVariants} className="text-lg sm:text-2xl lg:text-3xl block font-bold text-slate-800 dark:text-slate-200 leading-snug mb-4 sm:mb-8 max-w-xl">
-              Este es un <span className="text-primary glow-text">texto de demostración</span> que puedes reemplazar.
+            <motion.h2 variants={itemVariants} className="text-lg sm:text-2xl lg:text-3xl block font-extrabold text-black dark:text-white leading-snug mb-4 sm:mb-8 max-w-xl">
+              Este es un <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-800 via-blue-900 to-indigo-950 lg:from-cyan-600 lg:via-blue-600 lg:to-cyan-500 dark:from-cyan-400 dark:via-blue-400 dark:to-cyan-300 font-black drop-shadow-sm">texto de demostración</span> que puedes reemplazar.
             </motion.h2>
 
-            <motion.p variants={itemVariants} className="text-sm sm:text-lg max-w-xl mb-8 sm:mb-12 leading-relaxed font-semibold text-slate-600 dark:text-slate-400">
+            <motion.p variants={itemVariants} className="text-sm sm:text-lg max-w-xl mb-8 sm:mb-12 leading-relaxed font-bold text-black dark:text-white">
               [PÁGINA DE PRUEBA] Toda la información, textos, imágenes y colores de este sitio web son de prueba. Puedes reemplazarlos fácilmente con la información real de tu empresa, tus servicios y tu imagen corporativa.
             </motion.p>
 

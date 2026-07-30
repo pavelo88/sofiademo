@@ -48,10 +48,10 @@ export const Logo = ({ className, showText = true }: LogoProps) => {
       {showText && (
         <div className="flex flex-col justify-center leading-none font-headline mt-1">
           <span className="text-lg md:text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-            Tu <span className="text-cyan-500">Empresa</span>
+            Tu <span className="text-cyan-600 dark:text-cyan-400">Empresa</span>
           </span>
           <span className="text-[9px] md:text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-[0.2em] uppercase mt-0.5 whitespace-nowrap">
-            Tu Eslogan Corporativo
+            Eslogan Corporativo
           </span>
         </div>
       )}

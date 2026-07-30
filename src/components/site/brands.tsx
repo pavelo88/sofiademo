@@ -70,7 +70,7 @@ export default function Brands() {
 
     return (
         <section id="marcas" className="relative py-14 overflow-hidden scroll-mt-14">
-            <div className="absolute inset-y-2 inset-x-0 bg-white/80 backdrop-blur-md border-y border-white/40 shadow-lg z-0" />
+            <div className="absolute inset-y-2 inset-x-0 bg-white dark:bg-white border-y border-slate-200/80 shadow-xl z-0" />
 
             <div className="container mx-auto px-6 mb-10 text-center max-w-5xl relative z-10">
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-headline font-black text-black tracking-tighter leading-none uppercase">

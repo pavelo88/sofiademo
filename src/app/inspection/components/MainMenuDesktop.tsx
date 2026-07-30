@@ -25,9 +25,9 @@ interface MainMenuProps {
 
 function PremiumCard({ title, subtitle, icon, theme, onClick }: any) {
   const themes: any = {
-    forest: "from-[#102d1d] via-[#1a442c] to-[#0d2518] text-white border-[#276340]",
-    aqua: "from-[#419d94] via-[#5dd4c9] to-[#36857d] text-white border-[#7ae3da]",
-    lime: "from-[#7ba64f] via-[#9ad462] to-[#688c42] text-white border-[#b1eb77]",
+    forest: "from-[#0e7490] via-[#0891b2] to-[#155e75] text-white border-cyan-300/40 shadow-cyan-500/25",
+    aqua: "from-[#22d3ee] via-[#06b6d4] to-[#0891b2] text-white border-cyan-200/50 shadow-cyan-400/30",
+    lime: "from-[#419d94] via-[#5dd4c9] to-[#36857d] text-white border-[#7ae3da] shadow-teal-500/25",
     silver: "from-[#e2e8f0] via-[#ffffff] to-[#cbd5e1] text-[#0f172a] border-white shadow-slate-300",
   };
 

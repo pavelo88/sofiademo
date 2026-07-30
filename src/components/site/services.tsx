@@ -62,7 +62,7 @@ export default function Services() {
           >
             <CarouselContent>
               {services.map((service) => (
-                <CarouselItem key={service.id} className="basis-[90%] pl-4">
+                <CarouselItem key={service.id} className="basis-full px-1">
                   <div className="h-full py-2">
                     <ServiceCard service={service} />
                   </div>

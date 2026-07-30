@@ -9,6 +9,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from '@/components/ui/dialog';
 import { MessageCircle, Phone, User, Bot } from 'lucide-react';
 import { useState } from 'react';
@@ -97,7 +98,8 @@ export default function WhatsAppWidget() {
       </Popover>
 
       <Dialog open={chatOpen} onOpenChange={setChatOpen}>
-        <DialogContent className="sm:max-w-[425px] p-0 border-none bg-transparent shadow-none" hideClose>
+        <DialogContent className="sm:max-w-[425px] p-0 border-none bg-transparent shadow-none" aria-describedby={undefined}>
+          <DialogTitle className="sr-only">Agente Virtual SoftIA Tech</DialogTitle>
           <div className="bg-white dark:bg-[#0b1120] rounded-3xl overflow-hidden shadow-[0_0_50px_-12px_rgba(0,255,255,0.25)] border border-slate-200 dark:border-white/10 flex flex-col w-full h-[85vh] max-h-[600px] p-4 relative z-50">
             <ServiceLeadChat serviceName="Asesoría General" onClose={() => setChatOpen(false)} />
           </div>

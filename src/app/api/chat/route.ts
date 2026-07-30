@@ -27,7 +27,7 @@ Usa formato Markdown (negritas, cursivas, listas) para que tus respuestas sean e
       messages,
     });
 
-    return result.toTextStreamResponse();
+    return result.toUIMessageStreamResponse();
   } catch (error) {
     console.error('Chat API Error:', error);
     return new Response(JSON.stringify({ error: 'Ocurrió un error al procesar tu solicitud.' }), { status: 500 });
